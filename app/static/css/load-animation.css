@@ -6,30 +6,83 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .loading-screen {
-    background-color: rgb(53, 61, 72);
-    color: white;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    text-align: center;
     z-index: 1000;
 }
 
+.top-half, .bottom-half {
+    background-color: #1e2a38; /* Atom One Dark background color */
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-half {
+    border-bottom: 2px solid #3e4451; /* Atom One Dark border color */
+    border-color: white;
+}
+
+.loading-content {
+    animation: fadeIn 1s ease-in-out;
+    text-align: center;
+}
+
 .loading-title {
-    font-size: 2em;
-    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #ffffff; /* White text */
 }
 
 .loading-subtitle {
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.2em;
-    color: lightgray;
+    color: #abb2bf; /* Atom One Dark subtitle color */
+    margin-top: 10px;
+}
+
+.main-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 1s ease-in;
+}
+
+.main-content.show {
+    display: block;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes flyUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+}
+
+@keyframes flyDown {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
+}
+
+.fly-up {
+    animation: flyUp 1s forwards;
+}
+
+.fly-down {
+    animation: flyDown 1s forwards;
 }
