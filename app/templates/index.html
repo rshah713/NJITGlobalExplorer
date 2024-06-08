@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NJIT Global Explorer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+            color: #333;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .chart-container {
+            width: 45%;
+            display: inline-block;
+            margin: 20px;
+        }
+        canvas {
+            width: 100%;
+            height: 400px;
+        }
+        .navbar-custom {
+            background-color: #000;
+            border-bottom: 2px solid #00ffea;
+            transition: background-color 0.5s ease;
+        }
+        .navbar-custom:hover {
+            background-color: #333;
+        }
+        .btn-outline-custom {
+            border-color: #00ffea;
+            color: #00ffea;
+        }
+        .btn-outline-custom:hover {
+            background: #00ffea;
+            color: #000;
+        }
+    </style>
+</head>
+<body onload="document.body.style.opacity='1'" class="animate__animated animate__fadeIn">
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">NJIT Global Explorer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-outline-custom" onclick="location.href='#login'">Login</button>
+                    <button class="btn btn-outline-custom" onclick="location.href='#signup'">Signup</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+        <h2>NJIT Study Abroad Analytics Dashboard</h2>
+        <div class="chart-container">
+            <canvas id="chart1"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="chart2"></canvas>
+        </div>
+        <!-- Additional charts can be added here -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize the context for the first chart
+        var ctx1 = document.getElementById('chart1').getContext('2d');
+        // Initialize the context for the second chart
+        var ctx2 = document.getElementById('chart2').getContext('2d');
+
+        // Data for the first chart
+        var data1 = {
+            labels: ['Label1', 'Label2', 'Label3'],
+            datasets: [{
+                label: 'Dataset 1',
+                data: [10, 20, 30],
+                backgroundColor: ['red', 'blue', 'yellow']
+            }]
+        };
+
+        // Data for the second chart
+        var data2 = {
+            labels: ['Label4', 'Label5', 'Label6'],
+            datasets: [{
+                label: 'Dataset 2',
+                data: [30, 20, 10],
+                backgroundColor: ['green', 'purple', 'orange']
+            }]
+        };
+
+        // Configuration for the first chart
+        var chart1 = new Chart(ctx1, {
+            type: 'bar', // Chart type
+            data: data1, // Data for the chart
+            options: {
+                responsive: true, // Makes the chart responsive
+                title: {
+                    display: true,
+                    text: 'Chart 1 Title'
+                }
+            }
+        });
+
+        // Configuration for the second chart
+        var chart2 = new Chart(ctx2, {
+            type: 'line', // Chart type
+            data: data2, // Data for the chart
+            options: {
+                responsive: true, // Makes the chart responsive
+                title: {
+                    display: true,
+                    text: 'Chart 2 Title'
+                }
+            }
+        });
+    </script>
+</body>
+</html>
