@@ -21,6 +21,7 @@
 </div>
 {% endblock %}
 {% block additional_scripts %}
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
     const previousUrl = "{{ previous_url | default(url_for('index')) }}"; // Default to the root URL if previous_url is not provided
 

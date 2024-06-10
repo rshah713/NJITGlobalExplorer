@@ -6,3 +6,11 @@ __pycache__/
 
 .env
 .env.*
+
+.key
+*.key
+.csr
+*.csr
+.crt
+*.crt
+*.key.org
