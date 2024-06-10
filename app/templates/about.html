@@ -2,16 +2,48 @@
 
 {% block title %}About - NJIT Global Explorer & Rohan Shah{% endblock %}
 
+{% block additional_styles %}
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+<style>
+    .about-container {
+        font-family: 'Open Sans', sans-serif;
+        color: #abb2bf; /* Light gray text color */
+        background-color: #2c313c; /* Slightly lighter dark background */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Enhanced shadow for depth */
+    }
+    .about-header {
+        font-family: 'Montserrat', sans-serif;
+        color: #61afef; /* Blue color for headers */
+    }
+    .about-text {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #abb2bf; /* Light gray text color */
+    }
+    .social-links a {
+        color: #e06c75; /* Soft red for links */
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .social-links a:hover {
+        color: #d19a66; /* Soft orange for hover */
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h1 class="display-4 text-center">About NJIT Global Explorer</h1>
-    <p class="lead text-center">This project is a research initiative to determine the impact of the NJIT Study Abroad Program. Our goal is to understand and enhance the experiences of students participating in global educational opportunities.</p>
+<div class="container about-container mt-5">
+    <h1 class="display-4 text-center about-header">About NJIT Global Explorer</h1>
+    <p class="lead text-center about-text">This project is a research initiative to determine the impact of the NJIT Study Abroad Program. Our goal is to understand and enhance the experiences of students participating in global educational opportunities.</p>
     
     <div class="row mt-5">
         <div class="col-md-6 offset-md-3">
-            <h2 class="text-center">About Me</h2>
-            <p class="text-center">My name is Rohan Shah, a Computer Science major at the Albert Dorman Honors College. I am passionate about leveraging technology to solve real-world problems and connect communities.</p>
-            <p class="text-center">Connect with me on <a href="https://github.com/rshah713/" target="_blank">GitHub</a> or <a href="https://www.linkedin.com/in/rohan-shah-528504245/" target="_blank">LinkedIn</a>.</p>
+            <h2 class="text-center about-header">About Me</h2>
+            <p class="text-center about-text">My name is Rohan Shah, a Computer Science major at the Albert Dorman Honors College. I am passionate about leveraging technology to solve real-world problems and connect communities.</p>
+            <p class="text-center social-links">Connect with me on <a href="https://github.com/rshah713/" target="_blank">GitHub</a> or <a href="https://www.linkedin.com/in/rohan-shah-528504245/" target="_blank">LinkedIn</a>.</p>
         </div>
     </div>
 </div>
