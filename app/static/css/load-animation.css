@@ -53,17 +53,6 @@ body, html {
     margin-top: 10px;
 }
 
-.main-content {
-    display: none;
-    opacity: 0;
-    transition: opacity 1s ease-in;
-}
-
-.main-content.show {
-    display: block;
-    opacity: 1;
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

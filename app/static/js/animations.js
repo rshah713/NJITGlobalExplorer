@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const topHalf = document.querySelector('.top-half');
     const bottomHalf = document.querySelector('.bottom-half');
     const loadingContent = document.querySelector('.loading-content');
-    const mainContent = document.getElementById('main-content');
 
     function transitionToMainContent() {
         // Add the fly-up animation to the loading content and top-half
@@ -18,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
         // After the split screen effect, hide the loading screen and show the main content
         setTimeout(() => {
             loadingScreen.style.display = 'none';
-            mainContent.classList.add('show');
         }, 1000); // Duration of the animations
     }
 
