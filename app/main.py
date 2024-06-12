@@ -31,7 +31,6 @@ def login():
     
 @app.route('/handle_login', methods=['POST'])
 def handle_login():
-    print("RUNNING HANDLE LOGIN!")
     user_info = request.json
     if user_info.get('email', '') == '713rohanshah@gmail.com':
         print('ERROR ERROR ERROR')
@@ -48,7 +47,8 @@ def handle_login():
 def logout():
     session.clear()
     session['is_logged_in'] = False
-    return redirect(url_for('index'))  # Redirect to the homepage or login page
+    # return redirect(url_for('index'))  # Redirect to the homepage or login page
+    return jsonify({'message': 'Logout successful'}), 200
 
 if __name__ == '__main__':
     load_dotenv()

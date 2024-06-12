@@ -90,6 +90,7 @@
         window.logout = function() {
             signOut(auth).then(() => {
             // Make a POST request to the Flask server to handle the logout
+            console.log('Firebase signOut(auth) successful');
             fetch('/logout', {
                 method: 'POST',
                 headers: {
@@ -98,7 +99,6 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Redirect to home page or login page
                     window.location.href = '/';
                 } else {
                     throw new Error('Failed to log out');
