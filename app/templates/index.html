@@ -55,55 +55,56 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="static/js/animations.js"></script>
     <script>
-        // Initialize the context for the first chart
-        var ctx1 = document.getElementById('chart1').getContext('2d');
-        // Initialize the context for the second chart
-        var ctx2 = document.getElementById('chart2').getContext('2d');
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get_chart_data')
+                .then(response => response.json())
+                .then(data => {
+                    // Assuming 'data' contains 'data1' and 'data2' from the backend
+                    var ctx1 = document.getElementById('chart1').getContext('2d');
+                    var ctx2 = document.getElementById('chart2').getContext('2d');
 
-        // Data for the first chart
-        var data1 = {
-            labels: ['Label1', 'Label2', 'Label3'],
-            datasets: [{
-                label: 'Dataset 1',
-                data: [10, 20, 30],
-                backgroundColor: ['#e06c75', '#61afef', '#e5c07b']
-            }]
-        };
+                    var data1 = {
+                        labels: ['Label1', 'Label2', 'Label3'],
+                        datasets: [{
+                            label: 'Dataset 1',
+                            data: data.chart1,
+                            backgroundColor: ['#e06c75', '#61afef', '#e5c07b']
+                        }]
+                    };
 
-        // Data for the second chart
-        var data2 = {
-            labels: ['Label4', 'Label5', 'Label6'],
-            datasets: [{
-                label: 'Dataset 2',
-                data: [30, 20, 10],
-                backgroundColor: ['#98c379', '#c678dd', '#d19a66']
-            }]
-        };
+                    var data2 = {
+                        labels: ['Label4', 'Label5', 'Label6'],
+                        datasets: [{
+                            label: 'Dataset 2',
+                            data: data.chart2,
+                            backgroundColor: ['#98c379', '#c678dd', '#d19a66']
+                        }]
+                    };
 
-        // Configuration for the first chart
-        var chart1 = new Chart(ctx1, {
-            type: 'bar', // Chart type
-            data: data1, // Data for the chart
-            options: {
-                responsive: true, // Makes the chart responsive
-                title: {
-                    display: true,
-                    text: 'Chart 1 Title'
-                }
-            }
-        });
-
-        // Configuration for the second chart
-        var chart2 = new Chart(ctx2, {
-            type: 'line', // Chart type
-            data: data2, // Data for the chart
-            options: {
-                responsive: true, // Makes the chart responsive
-                title: {
-                    display: true,
-                    text: 'Chart 2 Title'
-                }
-            }
+                    var chart1 = new Chart(ctx1, {
+                        type: 'bar',
+                        data: data1,
+                        options: {
+                            responsive: true,
+                            title: {
+                                display: true,
+                                text: 'Chart 1 Title'
+                            }
+                        }
+                    });
+                    var chart2 = new Chart(ctx2, {
+                        type: 'line',
+                        data: data2,
+                        options: {
+                            responsive: true,
+                            title: {
+                                display: true,
+                                text: 'Chart 2 Title'
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching chart data:', error));
         });
     </script>
 </body>

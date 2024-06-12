@@ -58,6 +58,8 @@
       .then((result) => {
         if (result && result.user) {
           const user = result.user;
+          console.dir(result);
+          debugger;
           fetch('/handle_login', {
             method: 'POST',
             headers: {
@@ -66,7 +68,8 @@
             body: JSON.stringify({
               uid: user.uid,
               email: user.email,
-              displayName: user.displayName
+              displayName: user.displayName,
+              idToken: result._tokenResponse.idToken
             })
           }).then((response) => {
             if (!response.ok) {
