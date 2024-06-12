@@ -1,9 +1,18 @@
+import os
+import base64
+
 from flask import Flask, redirect, url_for, render_template, request, session, jsonify
 from dotenv import load_dotenv
-import os
+
+from FirebaseRealtimeDB import get_admin_users, create_temp_user
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
+
+def valid_ucid(email):
+    ucid = email.split('@')[0]
+    anon_user_token = create_temp_user()
+    return ucid in get_admin_users(anon_user_token)
 
 @app.context_processor
 def inject_api_key():
@@ -32,8 +41,13 @@ def login():
 @app.route('/handle_login', methods=['POST'])
 def handle_login():
     user_info = request.json
-    if user_info.get('email', '') == '713rohanshah@gmail.com':
-        print('ERROR ERROR ERROR')
+    e = base64.b64decode(b'NzEzcm9oYW5zaGFoQGdtYWlsLmNvbQ==').decode()
+    # if not user_info.get('email', '').endswith('njit.edu'):
+    if user_info.get('email', '') == e:
+        print('ERROR: NOT NJIT EMAIL')
+        return jsonify({'error': 'Unauthorized access'}), 401
+    elif not valid_ucid(user_info.get('email', '')): #ToDo: log unauthorized errors in firebase
+        print('ERROR: NOT VALID UCID')
         return jsonify({'error': 'Unauthorized access'}), 401
     else:
         print('logged in w/', user_info.get('email'))
