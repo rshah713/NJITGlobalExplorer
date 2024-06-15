@@ -52,6 +52,9 @@
         <div class="chart-container">
             <canvas id="chart3"></canvas>
         </div>
+        <div class="chart-container">
+            <canvas id="durationCtx"></canvas>
+        </div>
         <!-- Additional charts can be added here -->
     </div>
 
@@ -66,6 +69,7 @@
                     var ctx1 = document.getElementById('chart1').getContext('2d');
                     var ctx2 = document.getElementById('chart2').getContext('2d');
                     var ctx = document.getElementById('chart3').getContext('2d');
+                    var durationCtx = document.getElementById('durationCtx').getContext('2d');
 
                     var data1 = {
                         labels: ['Label1', 'Label2', 'Label3'],
@@ -83,6 +87,60 @@
                             data: data.chart2,
                             backgroundColor: ['#98c379', '#c678dd', '#d19a66']
                         }]
+                    };
+
+                    const data3 = {
+                        labels: [2018, 2019, 2020, 2021, 2022],
+                        datasets: [
+                            {
+                                label: 'National - Semester',
+                                data: [30.3, 30.7, 62.7, 26.3, 30.3],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                fill: 'start'
+                            },
+                            {
+                                label: "National - Summer",
+                                data: [45, 25, 50, 35, 15],
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                backgroundColor: 'rgba(153, 102, 255, 0.2',
+                            }
+                        ]
+                    };
+
+                    const durationData = {
+                        labels: [2018, 2019, 2020, 2021, 2022],
+                        datasets: [
+                            {
+                                label: 'National - Semester',
+                                data: [30.3, 30.7, 62.7, 26.3, 30.3],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                fill: 'start'
+                            },
+                            {
+                                label: "National - Summer",
+                                data: [38.5, 38.6, 0.9, 57.7, 49],
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                backgroundColor: 'rgba(153, 102, 255, 0.2',
+                            }
+                        ]
+                    };
+                    const durationConfig = {
+                        type: 'bar',
+                        data: durationData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Study Abroad Duration'
+                                }
+                            }
+                        }
                     };
 
                     var chart1 = new Chart(ctx1, {
@@ -107,25 +165,6 @@
                             }
                         }
                     });
-                    const data3 = {
-                        labels: [2018, 2019, 2020, 2021, 2022],
-                        datasets: [
-                            {
-                                label: 'National - Semester',
-                                data: [30.3, 30.7, 62.7, 26.3, 30.3],
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                fill: 'start'
-                            },
-                            {
-                                label: "National - Semester",
-                                data: [45, 25, 50, 35, 15],
-                                borderColor: 'rgba(153, 102, 255, 1)',
-                                backgroundColor: 'rgba(153, 102, 255, 0.2',
-                                fill: 'start'
-                            }
-                        ]
-                    };
 
                     const config = {
                         type: 'line',
@@ -153,6 +192,10 @@
                     );
                     myChart.options.elements.line.tension = 0.4;
                     myChart.update();
+
+                    const durationChart = new Chart(durationCtx, durationConfig);
+
+                    
                 })
                 .catch(error => console.error('Error fetching chart data:', error));
                 });
