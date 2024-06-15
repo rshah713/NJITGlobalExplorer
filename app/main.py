@@ -52,8 +52,9 @@ def get_chart_data():
     else:
         idToken = session.get('idToken')
         print('=> Using USER idToken for Charts')
-    print(get_firebase_chart_data(idToken))
-    return jsonify({'chart1': [10, 10, 10], 'chart2': [20, 20, 20]}), 200
+    data = get_firebase_chart_data(idToken)
+    print(data)
+    return jsonify(data), 200
 
     
 @app.route('/handle_login', methods=['POST'])
@@ -68,14 +69,13 @@ def handle_login():
     #     print('ERROR: NOT VALID UCID')
     #     return jsonify({'error': 'Unauthorized access'}), 401
     else:
-        print('logged in w/', user_info.get('email'))
+        print('=> Logged in with', user_info.get('email'))
     print('=> GET valid_ucids: ', valid_ucid(user_info.get('email', '')))
     session['is_logged_in'] = True
     session['uid'] = user_info.get('uid')
     session['email'] = user_info.get('email')
     session['displayName'] = user_info.get('displayName')
     session['idToken'] = user_info.get('idToken')
-    print("=> Authenticated with: ", session['idToken'])
     return jsonify({'message': 'Login successful'}), 200
 
 @app.route('/logout', methods=['POST'])
