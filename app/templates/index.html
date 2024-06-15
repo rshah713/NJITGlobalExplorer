@@ -108,35 +108,21 @@
                         }
                     });
                     const data3 = {
-                        labels: [2021, 2022, 2023],
+                        labels: [2018, 2019, 2020, 2021, 2022],
                         datasets: [
                             {
                                 label: 'National - Semester',
-                                data: [54, 50, 45],
+                                data: [30.3, 30.7, 62.7, 26.3, 30.3],
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                tension: 0.4
+                                fill: 'start'
                             },
                             {
-                                label: 'NJIT - Semester',
-                                data: [40, 42, 44],
+                                label: "National - Semester",
+                                data: [45, 25, 50, 35, 15],
                                 borderColor: 'rgba(153, 102, 255, 1)',
-                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                tension: 0.4
-                            },
-                            {
-                                label: 'National - Academic Year',
-                                data: [13, 15, 18],
-                                borderColor: 'rgba(255, 159, 64, 1)',
-                                backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                                tension: 0.4
-                            },
-                            {
-                                label: 'NJIT - Academic Year',
-                                data: [10, 12, 14],
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                tension: 0.4
+                                backgroundColor: 'rgba(153, 102, 255, 0.2',
+                                fill: 'start'
                             }
                         ]
                     };
@@ -157,28 +143,7 @@
                             },
                             interaction: {
                                 intersect: false,
-                                mode: 'index',
                             },
-                            elements: {
-                                line: {
-                                    tension: 0.4
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Year'
-                                    }
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Percentage'
-                                    },
-                                    beginAtZero: true
-                                }
-                            }
                         },
                     };
 
@@ -186,6 +151,8 @@
                         ctx,
                         config
                     );
+                    myChart.options.elements.line.tension = 0.4;
+                    myChart.update();
                 })
                 .catch(error => console.error('Error fetching chart data:', error));
                 });
