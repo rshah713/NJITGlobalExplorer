@@ -53,8 +53,22 @@ def create_temp_user():
     }
     new_user = make_firebase_request(ENDPOINT, payload, method="POST")
     if new_user:
-        return new_user.get('idToken')
+        return new_user.get('idToken'), new_user.get('refreshToken')
     print("ERROR: Failed to create anonymous user")
+    return False
+
+def refresh_token(refreshToken):
+    ENDPOINT = f"https://securetoken.googleapis.com/v1/token?key={get_firebase_api_key()}"
+    print('refreshing w/', refreshToken)
+    payload = {
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken
+    }
+    new_user = make_firebase_request(ENDPOINT, payload, method="POST")
+    if new_user:
+        print("=> Token Refreshed")
+        return new_user.get('idToken')
+    print("ERROR: Failed to refreshToken")
     return False
 
 def add_admin_user(idToken, new_ucid):

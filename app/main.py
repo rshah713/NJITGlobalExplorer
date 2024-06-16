@@ -4,7 +4,7 @@ import base64
 from flask import Flask, redirect, url_for, render_template, request, session, jsonify
 from dotenv import load_dotenv
 
-from FirebaseRealtimeDB import get_admin_users, create_temp_user, get_chart_data as get_firebase_chart_data
+from FirebaseRealtimeDB import get_admin_users, create_temp_user, refresh_token, get_chart_data as get_firebase_chart_data
 
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ def valid_ucid(email):
     ucid = email.split('@')[0]
     if not session.get('guest_idToken', False): # no guest has been created yet
         print('=> CREATE GUEST idToken')
-        session['guest_idToken'] = create_temp_user()
+        session['guest_idToken'], session['refreshToken'] = create_temp_user()
     return ucid in get_admin_users(session['guest_idToken'])
 
 @app.context_processor
@@ -46,14 +46,24 @@ def get_chart_data():
     if not session.get('idToken', False): # we aren't signed in, create a temp user
         session['is_logged_in'] = False
         if not session.get('guest_idToken', False): # no guest has been created yet
-            session['guest_idToken'] = create_temp_user()
+            session['guest_idToken'], session['refreshToken'] = create_temp_user()
         idToken = session['guest_idToken']
         print('=> Using GUEST idToken for Charts')
     else:
         idToken = session.get('idToken')
         print('=> Using USER idToken for Charts')
     data = get_firebase_chart_data(idToken)
-    print(data)
+    if not data: # it could mean idToken expired OR we actually don't have rights
+        if session.get('refreshTokenTries', 0) == 0:
+            new_token = refresh_token(session.get('refreshToken', ''))
+            if new_token:
+                session['refreshTokenTries'] = 0 # reset back to 0
+                if not session.get('idToken', False): # still operating w/ guest account
+                    session['guest_idToken'] = new_token
+                else:
+                    session['idToken'] = new_token
+            else:
+                session['refreshTokenTries'] = 1 # the error is smthn else, stop trying to refresh token
     return jsonify(data), 200
 
     
