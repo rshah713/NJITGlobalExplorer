@@ -16,6 +16,9 @@
             width: 80%;
             margin: auto;
             padding: 20px;
+            padding-bottom: 50px;
+            max-height: 100vh; /* Maximum height is 100% of the viewport height */
+            overflow-y: auto; /* Enable vertical scroll if necessary */
         }
         .chart-container {
             width: 45%;
@@ -104,6 +107,7 @@
                                 data: [45, 25, 50, 35, 15],
                                 borderColor: 'rgba(153, 102, 255, 1)',
                                 backgroundColor: 'rgba(153, 102, 255, 0.2',
+                                fill: 'start'
                             }
                         ]
                     };
@@ -119,7 +123,7 @@
                                 fill: 'start'
                             },
                             {
-                                label: "National - Summer",
+                                label: "NJIT - Semester",
                                 data: [38.5, 38.6, 0.9, 57.7, 49],
                                 borderColor: 'rgba(153, 102, 255, 1)',
                                 backgroundColor: 'rgba(153, 102, 255, 0.2',
@@ -134,6 +138,21 @@
                             plugins: {
                                 legend: {
                                     position: 'top',
+                                    onClick: function(mouseEvent, legendItem, legend) {
+
+                                        // ToDo: when adding new data, make checkbox UI that autoappends NJIT - {val} or National - {val}
+                                        // so when we pair it always finds smthn
+                                        const chart = legend.chart;
+                                        const label = legendItem.text;
+                                        const label2 = label.includes("NJIT") ? label.replace("NJIT", "National") : label.replace("National", "NJIT");
+                                        firstLabelIndex = chart.data.datasets.findIndex(dataset => dataset.label === label);
+                                        secondLabelIndex = chart.data.datasets.findIndex(dataset => dataset.label === label2);
+                                        console.log(label2);
+                                        const isVisible = chart.isDatasetVisible(firstLabelIndex);
+                                        chart.getDatasetMeta(firstLabelIndex).hidden = isVisible;
+                                        chart.getDatasetMeta(secondLabelIndex).hidden = isVisible;
+                                        chart.update();
+                                    }
                                 },
                                 title: {
                                     display: true,
