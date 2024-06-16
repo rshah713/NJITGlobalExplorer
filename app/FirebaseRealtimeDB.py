@@ -106,8 +106,38 @@ def save_chart_data(idToken, chartName, data):
 # payload = {'chart1': [10, 20, 30], 'chart2': [30, 20, 10]}
 # make_firebase_request(endpoint, payload)
 
-idToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImRmOGIxNTFiY2Q5MGQ1YjMwMjBlNTNhMzYyZTRiMzA3NTYzMzdhNjEiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9uaml0Z2xvYmFsZXhwbG9yZXIiLCJhdWQiOiJuaml0Z2xvYmFsZXhwbG9yZXIiLCJhdXRoX3RpbWUiOjE3MTgyMTkxOTIsInVzZXJfaWQiOiI3a3RGQ1ZJN0I2aFRIVmJHNkNBeWo5SzFsazkzIiwic3ViIjoiN2t0RkNWSTdCNmhUSFZiRzZDQXlqOUsxbGs5MyIsImlhdCI6MTcxODIxOTE5MiwiZXhwIjoxNzE4MjIyNzkyLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7fSwic2lnbl9pbl9wcm92aWRlciI6ImFub255bW91cyJ9fQ.cshii3FAkEveb8it6E26hmt2pDQ3SCf6ccyDcIYZlsz1Oh4FSTs4NhKAiH7IEsDrxBFR4UuJOayBR0fN6XjnkJOPN5KHPyxm0I_AhCxreNc_HOJGA-TkMFBbXil9S17efdjBELJhQe9gEUnX8BXTE2wpkLtq5XP80ZWBEze6y13LNTCWQBix8XocpQqZd2A1bXHqy2DNO7WRCZR12VPT8I67I-68x6o2bN_TqfD6XOku0Bl0Tm--4C7_u5tHV8CgGX98EyKUaCzSD3AasXSWLRNURE63h6ouHKYPgLekd5CJT8_NDgLqHRKWyDiQjTGEc4_EzqkT6FcElrfIQbDAHg'
+# idToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImRmOGIxNTFiY2Q5MGQ1YjMwMjBlNTNhMzYyZTRiMzA3NTYzMzdhNjEiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9uaml0Z2xvYmFsZXhwbG9yZXIiLCJhdWQiOiJuaml0Z2xvYmFsZXhwbG9yZXIiLCJhdXRoX3RpbWUiOjE3MTgyMTkxOTIsInVzZXJfaWQiOiI3a3RGQ1ZJN0I2aFRIVmJHNkNBeWo5SzFsazkzIiwic3ViIjoiN2t0RkNWSTdCNmhUSFZiRzZDQXlqOUsxbGs5MyIsImlhdCI6MTcxODIxOTE5MiwiZXhwIjoxNzE4MjIyNzkyLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7fSwic2lnbl9pbl9wcm92aWRlciI6ImFub255bW91cyJ9fQ.cshii3FAkEveb8it6E26hmt2pDQ3SCf6ccyDcIYZlsz1Oh4FSTs4NhKAiH7IEsDrxBFR4UuJOayBR0fN6XjnkJOPN5KHPyxm0I_AhCxreNc_HOJGA-TkMFBbXil9S17efdjBELJhQe9gEUnX8BXTE2wpkLtq5XP80ZWBEze6y13LNTCWQBix8XocpQqZd2A1bXHqy2DNO7WRCZR12VPT8I67I-68x6o2bN_TqfD6XOku0Bl0Tm--4C7_u5tHV8CgGX98EyKUaCzSD3AasXSWLRNURE63h6ouHKYPgLekd5CJT8_NDgLqHRKWyDiQjTGEc4_EzqkT6FcElrfIQbDAHg'
 
-
-# save_chart_data(idToken, 'chart2', [30, 20, 10])
+idToken, _ = create_temp_user()
+data = {
+    "labels": [2018, 2019, 2020, 2021, 2022],
+    "datasets": [
+        {
+            "label": 'National - Semester',
+            "data": [30.3, 30.7, 62.7, 26.3, 30.3],
+            "borderColor": 'rgba(75, 192, 192, 1)',
+            "backgroundColor": 'rgba(75, 192, 192, 1)',
+            "fill": 'start'
+        },
+        {
+            "label": "NJIT - Semester",
+            "data": [38.5, 38.6, 5.9, 57.7, 49],
+            "borderColor": 'rgba(153, 102, 255, 1)',
+            "backgroundColor": 'rgba(153, 102, 255, 1)',
+        },
+        {
+            "label": "National - Summer",
+            "data": [30, 40, 45.5, 50, 53.6],
+            "borderColor": 'rgba(255, 159, 64, 1)',
+            "backgroundColor": 'rgba(255, 159, 64, 1)',
+        },
+        {
+            "label": "NJIT - Summer",
+            "data": [50, 45.3, 54.6, 32.5, 21.1],
+            "borderColor": 'rgba(54, 162, 235, 1)',
+            "backgroundColor": 'rgba(54, 162, 235, 1)',
+        }
+    ]
+};
+# save_chart_data(idToken, "durationData", data)
 
