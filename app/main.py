@@ -65,13 +65,19 @@ def get_chart_data():
                 else:
                     idToken = session['idToken'] = new_token
                 data = get_firebase_chart_data(idToken)
+                # print('new data! ', data)
             else:
                 session['refreshTokenTries'] = 1 # the error is smthn else, stop trying to refresh token
     else:
-        # print("=> Sending data to LLM Model w/ query: ")
-        # resp = llm.generate_dataset_paragraph(data, 'Duration of Study Abroad Participants')
+        pass
+        # print("=> General Query  to LLM Model: ")
+        # print(data['durationData'])
+        # resp = llm.generate_dataset_paragraph(data['durationData'], 'Duration of Study Abroad Participants')
         # print('LLM Response: ', resp)
-        print()
+
+        # print(" => Recommendations based on provided data: ")
+        # resp = llm.make_request(data, 'Duration of Study Abroad Participants', "What's a reccomendation you'd make to the NJIT Study Abroad Office? It should be a tangible strategy based off this specific dataset, not to research in other areas")
+        # print(resp)
     return jsonify(data), 200
 
     

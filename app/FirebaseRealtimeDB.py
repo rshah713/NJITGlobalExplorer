@@ -144,6 +144,6 @@ data = {
     ]
 };
 
-desc = "The data on duration of study abroad participants reveals a notable trend in the semester-long programs. Specifically, the National - Semester program has consistently seen a significant increase in duration, with a peak of 62.7% in 2020. Conversely, the NJIT - Semester program has experienced a decline in duration, with a low of 26.3% in 2020. This disparity suggests that the National program may be more effective in retaining students for longer periods, warranting further investigation into the program's structure and offerings."
-save_chart_description(idToken, "durationData", desc)
+desc = "The dataset provides information on the duration of study abroad participants from NJIT and National Study Abroad Programs. The data shows that the National Study Abroad Programs have a generally increasing trend, with a slight dip in 2020. In contrast, NJIT Study Abroad Programs have a more fluctuating trend, with a significant increase in 2020. The data also suggests that NJIT Study Abroad Programs have a higher participation rate in summer programs compared to semester programs. The data suggests NJIT Study Abroad should consider increasing marketing efforts for semester programs, as the participation rate has been consistently lower than summer programs, as seen in the 2022 data where only 30.3% of participants went on semester programs compared to 53.6% on summer programs."
+# save_chart_description(idToken, "durationData", desc)
 

@@ -32,6 +32,10 @@ user_query: {user_prompt}
     return response.choices[0].message.content
 
 def generate_dataset_paragraph(dataset, dataset_info):
-    system_prompt = '''You are a data-analysis agent tasked with generating paragraph long descriptions analyzing trends. Do not use first-person pronouns. Pick only 1-2 trends, response must be no more than 1 paragraph total. 
-    Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...)'''
+    system_prompt = '''You are a data-analysis agent tasked with generating 6-8 sentence descriptions of a dataset. Do not use first-person pronouns. 
+    Give a good summary of the data as a whole and include a brief comparative analysis between NJIT and National Study Abroad Programs. 
+    It should be 6-8 sentences and it should be very specific. If the dataset is generally rising but dips at some point, you should note that.
+    Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...). 
+    The last sentence should be a concrete recommendation to the NJIT Study Abroad Office (recommendation should be directly related to data, not generic 'study other areas').
+    The last sentence recommendation should follow the form The data suggests NJIT Study Abroad should (some recc) by (action), as shown by (specific example from data)'''
     return make_request(dataset, dataset_info, 'Find some trends in this data', system_prompt=system_prompt)
