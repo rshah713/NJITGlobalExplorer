@@ -20,10 +20,21 @@
             max-height: 100vh; /* Maximum height is 100% of the viewport height */
             overflow-y: auto; /* Enable vertical scroll if necessary */
         }
-        .chart-container {
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .chart-container, .text-container {
             width: 45%;
             display: inline-block;
             margin: 20px;
+        }
+        .text-container {
+            border: 1px solid #ccc; /* Light grey border */
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px; /* Padding inside the box */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
         canvas {
             width: 100%;
@@ -46,19 +57,25 @@
     <div class="container">
         <h1>Welcome, {{ session.get('displayName', 'Guest') }}!</h1>
         <h2>NJIT Study Abroad Analytics Dashboard</h2>
-        <div class="chart-container">
-            <canvas id="chart1"></canvas>
+    
+        <div class="row">
+            <div class="chart-container">
+                <canvas id="chart3"></canvas>
+            </div>
+            <div class="text-container">
+                <p>This is chart 3</p>
+            </div>
         </div>
-        <div class="chart-container">
-            <canvas id="chart2"></canvas>
+    
+        <div class="row">
+            <div class="text-container" id="durationText">
+                <p></p>
+            </div>
+            <div class="chart-container">
+                <canvas id="durationCtx"></canvas>
+            </div>
         </div>
-        <div class="chart-container">
-            <canvas id="chart3"></canvas>
-        </div>
-        <div class="chart-container">
-            <canvas id="durationCtx"></canvas>
-        </div>
-        <!-- Additional charts can be added here -->
+        <!-- Additional rows can be added here -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -69,29 +86,10 @@
                 .then(response => response.json())
                 .then(data => {
                     // Assuming 'data' contains 'data1' and 'data2' from the backend
-                    var ctx1 = document.getElementById('chart1').getContext('2d');
-                    var ctx2 = document.getElementById('chart2').getContext('2d');
                     var ctx = document.getElementById('chart3').getContext('2d');
                     var durationCtx = document.getElementById('durationCtx').getContext('2d');
-                    console.log(data);
-
-                    var data1 = {
-                        labels: ['Label1', 'Label2', 'Label3'],
-                        datasets: [{
-                            label: 'Dataset 1',
-                            data: data.chart1,
-                            backgroundColor: ['#e06c75', '#61afef', '#e5c07b']
-                        }]
-                    };
-
-                    var data2 = {
-                        labels: ['Label4', 'Label5', 'Label6'],
-                        datasets: [{
-                            label: 'Dataset 2',
-                            data: data.chart2,
-                            backgroundColor: ['#98c379', '#c678dd', '#d19a66']
-                        }]
-                    };
+                    var durationTextContainer = document.querySelector("#durationText p");
+                    durationTextContainer.textContent = data.description.durationData;
 
                     const data3 = {
                         labels: [2018, 2019, 2020, 2021, 2022],
@@ -112,7 +110,7 @@
                             }
                         ]
                     };
-                    
+
                     const durationConfig = {
                         type: 'bar',
                         data: data.durationData,
@@ -144,29 +142,6 @@
                             }
                         }
                     };
-
-                    var chart1 = new Chart(ctx1, {
-                        type: 'bar',
-                        data: data1,
-                        options: {
-                            responsive: true,
-                            title: {
-                                display: true,
-                                text: 'Chart 1 Title'
-                            }
-                        }
-                    });
-                    var chart2 = new Chart(ctx2, {
-                        type: 'line',
-                        data: data2,
-                        options: {
-                            responsive: true,
-                            title: {
-                                display: true,
-                                text: 'Chart 2 Title'
-                            }
-                        }
-                    });
 
                     const config = {
                         type: 'line',

@@ -64,15 +64,14 @@ def get_chart_data():
                     idToken = session['guest_idToken'] = new_token
                 else:
                     idToken = session['idToken'] = new_token
-                print('new idtok', idToken)
                 data = get_firebase_chart_data(idToken)
-                print('new data', data)
             else:
                 session['refreshTokenTries'] = 1 # the error is smthn else, stop trying to refresh token
     else:
-        print("=> Sending data to LLM Model w/ query: ")
-        resp = llm.make_request(data, 'Duration of Study Abroad Participants', 'What year has an abormally low % of Semester Abroad students?')
-        print(resp)
+        # print("=> Sending data to LLM Model w/ query: ")
+        # resp = llm.generate_dataset_paragraph(data, 'Duration of Study Abroad Participants')
+        # print('LLM Response: ', resp)
+        print()
     return jsonify(data), 200
 
     
@@ -89,6 +88,7 @@ def handle_login():
     #     return jsonify({'error': 'Unauthorized access'}), 401
     else:
         print('=> Logged in with', user_info.get('email'))
+    session.clear()
     print('=> GET valid_ucids: ', valid_ucid(user_info.get('email', '')))
     session['is_logged_in'] = True
     session['uid'] = user_info.get('uid')

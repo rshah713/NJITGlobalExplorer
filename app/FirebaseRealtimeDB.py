@@ -58,8 +58,8 @@ def create_temp_user():
     return False
 
 def refresh_token(refreshToken):
-    ENDPOINT = f"https://securetoken.googleapis.com/v1/token?key={get_firebase_api_key()}"
     print('refreshing w/', refreshToken)
+    ENDPOINT = f"https://securetoken.googleapis.com/v1/token?key={get_firebase_api_key()}"
     payload = {
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken
@@ -94,6 +94,11 @@ def get_chart_data(idToken):
 def save_chart_data(idToken, chartName, data):
     ENDPOINT = get_firebase_db_url() + 'data.json'
     payload = {chartName: data}
+    return make_firebase_request(ENDPOINT, payload, idToken=idToken)
+
+def save_chart_description(idToken, chartName, desc):
+    ENDPOINT = get_firebase_db_url() + 'data/description.json'
+    payload = {chartName: desc}
     return make_firebase_request(ENDPOINT, payload, idToken=idToken)
 
 # idToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImRmOGIxNTFiY2Q5MGQ1YjMwMjBlNTNhMzYyZTRiMzA3NTYzMzdhNjEiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9uaml0Z2xvYmFsZXhwbG9yZXIiLCJhdWQiOiJuaml0Z2xvYmFsZXhwbG9yZXIiLCJhdXRoX3RpbWUiOjE3MTgyMDIzMjIsInVzZXJfaWQiOiJFclpkM3h0T2E0VWpsVVo3d09KRDU5WmlmQmgxIiwic3ViIjoiRXJaZDN4dE9hNFVqbFVaN3dPSkQ1OVppZkJoMSIsImlhdCI6MTcxODIwMjMyMiwiZXhwIjoxNzE4MjA1OTIyLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7fSwic2lnbl9pbl9wcm92aWRlciI6ImFub255bW91cyJ9fQ.dvYO864Ao_ahvJXqNxBnlZJL4tcuP3lNhouiriaa9maSXLJ1j6855Pe6C3vUDouawZ58KgXAbf_Zu3fJoMIIee8SWuX6SFQ7ExhO40PgudOwuUZHjyTJDSgMr95VZtUUlVZzfy_wBUZVoUJGObBunxpqBr8HOD-zOJKbomLqSMlvVf2xOqbLNjpHjdua7OUqDyvduJ9b84sf7QCLRfjFYLSL129vm03fGhE07k61X3MgM3zrnYQHSE8-W5FVdO9de_HTUBlfjRNyXA-LyV3AS9UJiPjWuLnaBQS2UWz0uj7TG3YsA_AjiWbZpyJ7ezQ9O3a34lvRen2AMEddCIkMXA'
@@ -138,5 +143,7 @@ data = {
         }
     ]
 };
-# save_chart_data(idToken, "durationData", data)
+
+desc = "The data on duration of study abroad participants reveals a notable trend in the semester-long programs. Specifically, the National - Semester program has consistently seen a significant increase in duration, with a peak of 62.7% in 2020. Conversely, the NJIT - Semester program has experienced a decline in duration, with a low of 26.3% in 2020. This disparity suggests that the National program may be more effective in retaining students for longer periods, warranting further investigation into the program's structure and offerings."
+save_chart_description(idToken, "durationData", desc)
 
