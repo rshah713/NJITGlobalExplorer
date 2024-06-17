@@ -69,7 +69,8 @@
               uid: user.uid,
               email: user.email,
               displayName: user.displayName,
-              idToken: result._tokenResponse.idToken
+              idToken: result._tokenResponse.idToken,
+              refreshToken: result._tokenResponse.refreshToken
             })
           }).then((response) => {
             if (!response.ok) {

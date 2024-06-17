@@ -5,6 +5,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, j
 from dotenv import load_dotenv
 
 from FirebaseRealtimeDB import get_admin_users, create_temp_user, refresh_token, get_chart_data as get_firebase_chart_data
+import llm
 
 
 app = Flask(__name__)
@@ -54,16 +55,24 @@ def get_chart_data():
         print('=> Using USER idToken for Charts')
     data = get_firebase_chart_data(idToken)
     if not data: # it could mean idToken expired OR we actually don't have rights
+        session['refreshTokenTries'] = 0
         if session.get('refreshTokenTries', 0) == 0:
             new_token = refresh_token(session.get('refreshToken', ''))
             if new_token:
                 session['refreshTokenTries'] = 0 # reset back to 0
                 if not session.get('idToken', False): # still operating w/ guest account
-                    session['guest_idToken'] = new_token
+                    idToken = session['guest_idToken'] = new_token
                 else:
-                    session['idToken'] = new_token
+                    idToken = session['idToken'] = new_token
+                print('new idtok', idToken)
+                data = get_firebase_chart_data(idToken)
+                print('new data', data)
             else:
                 session['refreshTokenTries'] = 1 # the error is smthn else, stop trying to refresh token
+    else:
+        print("=> Sending data to LLM Model w/ query: ")
+        resp = llm.make_request(data, 'Duration of Study Abroad Participants', 'What year has an abormally low % of Semester Abroad students?')
+        print(resp)
     return jsonify(data), 200
 
     
@@ -86,6 +95,7 @@ def handle_login():
     session['email'] = user_info.get('email')
     session['displayName'] = user_info.get('displayName')
     session['idToken'] = user_info.get('idToken')
+    session['refreshToken'] = user_info.get('refreshToken')
     return jsonify({'message': 'Login successful'}), 200
 
 @app.route('/logout', methods=['POST'])

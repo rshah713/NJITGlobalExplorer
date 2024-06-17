@@ -66,8 +66,7 @@ def refresh_token(refreshToken):
     }
     new_user = make_firebase_request(ENDPOINT, payload, method="POST")
     if new_user:
-        print("=> Token Refreshed")
-        return new_user.get('idToken')
+        return new_user.get('id_token')
     print("ERROR: Failed to refreshToken")
     return False
 
