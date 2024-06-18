@@ -110,8 +110,13 @@ def logout():
 @app.route('/enter_data')
 def enter_data():
     if session.get('idToken') is None:
+        print("=> Invalid Auth for /enter_data, redirecting...")
         return redirect(url_for('index'))
     return render_template('enter_data.html')
+
+@app.route('/save_new_data', methods=['POST'])
+def save_new_data():
+    pass
 
 if __name__ == '__main__':
     load_dotenv()

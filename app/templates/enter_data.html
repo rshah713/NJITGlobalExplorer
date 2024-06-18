@@ -36,6 +36,9 @@
     .axis-label {
         margin-top: 20px;
     }
+    #datasetSelectContainer {
+        margin-bottom: 20px;
+    }
 </style>
 {% endblock %}
 
@@ -47,56 +50,122 @@
             <label for="chartSelect">Select Chart</label>
             <select class="form-control" id="chartSelect" onchange="displayDatasetSelect(this.value)">
                 <option selected disabled>Choose...</option>
-                <option>Option 1</option>
-                <option>Option 2</option>
                 <!-- Add more options as needed -->
             </select>
         </div>
 
         <div class="form-group" id="datasetSelectContainer" style="display: none;">
             <label for="datasetSelect">Select Dataset</label>
-            <select class="form-control" id="datasetSelect" onchange="displayAxisInputs(this.value)">
+            <select class="form-control" id="datasetSelect" onchange="displayDatasetInfo(this.value)">
                 <option selected disabled>Choose...</option>
-                <option>Dataset 1</option>
-                <option>Dataset 2</option>
                 <!-- Add more options as needed -->
             </select>
         </div>
 
         <div id="axisInputs" style="display: none;">
             <div class="row">
-                <div class="col">
-                    <h3 class="text-center axis-label">X-axis</h3>
-                    {% for i in range(10) %}
-                        <input type="text" class="form-control mb-3" placeholder="X-axis value {{ i+1 }}">
-                    {% endfor %}
+                <div class="col labels-container">
+                    <h3 class="text-center axis-label">Labels</h3>
+                    <!-- Input fields will be added here -->
                 </div>
-                <div class="col">
-                    <h3 class="text-center axis-label">Y-axis</h3>
-                    {% for i in range(10) %}
-                        <input type="text" class="form-control mb-3" placeholder="Y-axis value {{ i+1 }}">
-                    {% endfor %}
+                <div class="col values-container">
+                    <h3 class="text-center axis-label">Values</h3>
+                    <!-- Input fields will be added here -->
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-3">Save</button>
         </div>
     </form>
 </div>
-
 <script>
+    window.onload = function() {
+        fetch('/get_chart_data')
+            .then(response => response.json())
+            .then(data => {
+                retrievedData = data;
+                const chartSelect = document.getElementById('chartSelect');
+                let keys = Object.keys(data);
+                keys = keys.filter(key => key !== 'description');
+
+                keys.forEach(chartName => {
+                    const option = document.createElement('option');
+                    option.text = chartName;
+                    option.value = chartName;
+                    chartSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    };
+    function removeOptions(selectElement) {
+        var i;
+        var L = selectElement.options.length - 1;
+        for(i = L; i > 0; i--) {
+            selectElement.remove(i);
+        }
+    }
     function displayDatasetSelect(value) {
         if (value) {
             document.getElementById('datasetSelectContainer').style.display = 'block';
             document.getElementById('axisInputs').style.display = 'none';
+            const dataSelect = document.getElementById('datasetSelect');
+            removeOptions(dataSelect);
+            retrievedChart = value;
+            retrievedData[value].datasets.forEach(datasetName => {
+                const option = document.createElement('option');
+                option.text = datasetName.label;
+                option.value = datasetName.label;
+                dataSelect.add(option);
+            })
         } else {
             document.getElementById('datasetSelectContainer').style.display = 'none';
             document.getElementById('axisInputs').style.display = 'none';
         }
     }
 
-    function displayAxisInputs(value) {
+    function displayDatasetInfo(value) {
         if (value) {
             document.getElementById('axisInputs').style.display = 'block';
+            const labelsContainer = document.querySelector('.labels-container');
+            const valuesContainer = document.querySelector('.values-container');
+
+            labelsContainer.innerHTML = '';
+            valuesContainer.innerHTML = '';
+
+            let datasets = retrievedData[retrievedChart].datasets
+            const numDatasets = datasets.length;
+            let chosenDataset;
+            for (let i = 0; i < numDatasets; i++) {
+                if (datasets[i].label === value) {
+                    // console.log(value);
+                    chosenDataset = datasets[i];
+                    break;
+                } else {
+                    console.log("FOUND " + value + " instead of " + datasets[i].label);
+                }
+            }
+            // console.log(chosenDataset);
+            // console.log(chosenDataset.data[5]);
+            const numDataPoints = chosenDataset.data.length;
+            const numLabels = retrievedData[retrievedChart].labels.length;
+            let valueCounter = 0; // this could be LESS than amount of labels
+            for (let i = 0; i < numLabels; i++) {
+                const labelInput = document.createElement('input');
+                labelInput.type = 'text';
+                labelInput.className = 'form-control mb-3';
+                labelInput.placeholder = retrievedData[retrievedChart].labels[i];
+                labelsContainer.appendChild(labelInput);
+
+                const valueInput = document.createElement('input');
+                valueInput.type = 'text';
+                valueInput.className = 'form-control mb-3';
+                
+                if (i < numDataPoints) {
+                    valueInput.placeholder = chosenDataset.data[i];
+                } else {
+                    valueInput.placeholder = `No data recorded`;
+                }
+                valuesContainer.appendChild(valueInput);
+            }
         } else {
             document.getElementById('axisInputs').style.display = 'none';
         }
