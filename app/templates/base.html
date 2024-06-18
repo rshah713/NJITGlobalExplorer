@@ -49,15 +49,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
                 </ul>
                 <div class="d-flex">
                     {% if not session.get('is_logged_in', False) %}
                     <button class="btn btn-outline-custom" onclick="location.href='/login?next=' + encodeURIComponent(window.location.pathname + window.location.search)">Login</button>
                     {% else %}
                         <button class="btn btn-outline-custom" onclick="logout()">Logout</button>
+                        {% if session.get('idToken', False) %}
+                        <button class="btn btn-outline-custom" onclick="location.href='/enter_data'">Modify Data</button>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
