@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Data Entry Page{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .container {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    .form-group label {
+        color: #61afef;
+    }
+    .form-control {
+        background-color: #3e4451;
+        color: #abb2bf;
+        border: 1px solid #4b5263;
+    }
+    .form-control::placeholder {
+        color: #5c6370;
+    }
+    .btn-primary {
+        background-color: #61afef;
+        border-color: #61afef;
+    }
+    .btn-primary:hover {
+        background-color: #4b8ecf;
+        border-color: #4b8ecf;
+    }
+    h1, h3 {
+        color: #e06c75;
+    }
+    .axis-label {
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Data Entry Page</h1>
+    <form>
+        <div class="form-group">
+            <label for="chartSelect">Select Chart</label>
+            <select class="form-control" id="chartSelect" onchange="displayDatasetSelect(this.value)">
+                <option selected disabled>Choose...</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+
+        <div class="form-group" id="datasetSelectContainer" style="display: none;">
+            <label for="datasetSelect">Select Dataset</label>
+            <select class="form-control" id="datasetSelect" onchange="displayAxisInputs(this.value)">
+                <option selected disabled>Choose...</option>
+                <option>Dataset 1</option>
+                <option>Dataset 2</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+
+        <div id="axisInputs" style="display: none;">
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-center axis-label">X-axis</h3>
+                    {% for i in range(10) %}
+                        <input type="text" class="form-control mb-3" placeholder="X-axis value {{ i+1 }}">
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    <h3 class="text-center axis-label">Y-axis</h3>
+                    {% for i in range(10) %}
+                        <input type="text" class="form-control mb-3" placeholder="Y-axis value {{ i+1 }}">
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Save</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function displayDatasetSelect(value) {
+        if (value) {
+            document.getElementById('datasetSelectContainer').style.display = 'block';
+            document.getElementById('axisInputs').style.display = 'none';
+        } else {
+            document.getElementById('datasetSelectContainer').style.display = 'none';
+            document.getElementById('axisInputs').style.display = 'none';
+        }
+    }
+
+    function displayAxisInputs(value) {
+        if (value) {
+            document.getElementById('axisInputs').style.display = 'block';
+        } else {
+            document.getElementById('axisInputs').style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

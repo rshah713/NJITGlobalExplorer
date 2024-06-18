@@ -26,10 +26,6 @@ def inject_api_key():
 def index():
     return render_template('index.html')
 
-@app.route('/admin')
-def admin():
-    return redirect(url_for('index'))
-
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -110,6 +106,12 @@ def logout():
     session['is_logged_in'] = False
     # return redirect(url_for('index'))  # Redirect to the homepage or login page
     return jsonify({'message': 'Logout successful'}), 200
+
+@app.route('/enter_data')
+def enter_data():
+    if session.get('idToken') is None:
+        return redirect(url_for('index'))
+    return render_template('enter_data.html')
 
 if __name__ == '__main__':
     load_dotenv()

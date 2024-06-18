@@ -90,27 +90,6 @@
                     var durationCtx = document.getElementById('durationCtx').getContext('2d');
                     var durationTextContainer = document.querySelector("#durationText p");
                     durationTextContainer.textContent = data.description.durationData;
-
-                    const data3 = {
-                        labels: ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'],
-                        datasets: [
-                            {
-                                label: 'National',
-                                data: [0.94, 0.25, 0.57, 1.01, 0.62, 1.28, 1.65, .01, 3.01, 0.94, 1.26, .6, .32, .69],
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                fill: 'start'
-                            },
-                            {
-                                label: "National - Summer",
-                                data: [.45, .25, .50, .35, .15],
-                                borderColor: 'rgba(153, 102, 255, 1)',
-                                backgroundColor: 'rgba(153, 102, 255, 0.2',
-                                fill: 'start'
-                            }
-                        ]
-                    };
-
                     const durationConfig = {
                         type: 'bar',
                         data: data.durationData,
@@ -160,7 +139,7 @@
 
                     const participationConfig = {
                         type: 'line',
-                        data: data3,
+                        data: data.abroadParticipation,
                         options: {
                             responsive: true,
                             plugins: {
