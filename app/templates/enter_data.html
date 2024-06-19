@@ -73,7 +73,7 @@
                     <!-- Input fields will be added here -->
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Save</button>
+            <button type="submit" class="btn btn-primary mt-3" onclick="saveData()">Save</button>
         </div>
     </form>
 </div>
@@ -131,12 +131,12 @@
             labelsContainer.innerHTML = '';
             valuesContainer.innerHTML = '';
 
+            retrievedDatasetLabel = value;
             let datasets = retrievedData[retrievedChart].datasets
             const numDatasets = datasets.length;
             let chosenDataset;
             for (let i = 0; i < numDatasets; i++) {
                 if (datasets[i].label === value) {
-                    // console.log(value);
                     chosenDataset = datasets[i];
                     break;
                 } else {
@@ -170,5 +170,41 @@
             document.getElementById('axisInputs').style.display = 'none';
         }
     }
+function saveData() {
+    const labelsContainer = document.querySelector('.labels-container');
+    const valuesContainer = document.querySelector('.values-container');
+    const labelInputs = labelsContainer.querySelectorAll('input');
+    const valueInputs = valuesContainer.querySelectorAll('input');
+
+    let labels = [];
+    let data = [];
+
+    for (let i = 0; i < labelInputs.length; i++) {
+        // If the input value is empty, use the placeholder. Otherwise, use the input value.
+        labels.push(labelInputs[i].value || labelInputs[i].placeholder);
+        data.push(parseFloat(valueInputs[i].value) || parseFloat(valueInputs[i].placeholder));
+    }
+
+    
+    const payload = {
+        'chartName': retrievedChart,
+        'datasetLabel': retrievedDatasetLabel,
+        'labels': labels,
+        'data': data
+    };
+
+    fetch('/save_new_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 </script>
 {% endblock %}

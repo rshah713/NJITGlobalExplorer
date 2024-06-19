@@ -4,7 +4,8 @@ import base64
 from flask import Flask, redirect, url_for, render_template, request, session, jsonify
 from dotenv import load_dotenv
 
-from FirebaseRealtimeDB import get_admin_users, create_temp_user, refresh_token, get_chart_data as get_firebase_chart_data
+from FirebaseRealtimeDB import get_admin_users, create_temp_user, refresh_token, get_datasets, \
+      get_chart_data as get_firebase_chart_data, save_chart_data
 import llm
 
 
@@ -104,7 +105,6 @@ def handle_login():
 def logout():
     session.clear()
     session['is_logged_in'] = False
-    # return redirect(url_for('index'))  # Redirect to the homepage or login page
     return jsonify({'message': 'Logout successful'}), 200
 
 @app.route('/enter_data')
@@ -116,7 +116,25 @@ def enter_data():
 
 @app.route('/save_new_data', methods=['POST'])
 def save_new_data():
-    pass
+    data = request.json
+    '''it should be idToken b/c we are OAuth verified'''
+    
+    datasets = get_datasets(session.get('idToken'), data.get('chartName'))
+    for ind, dataset in enumerate(datasets):
+        if dataset['label'] == data.get('datasetlabel'):
+            break
+
+    # replace new entry
+    datasets[ind]['data'] = data.get('data')
+
+    # create new entry object to be posted to chartName
+    entry = {
+        'labels': data.get('labels'),
+        'datasets': datasets
+    }
+    save_chart_data(session.get('idToken'), data.get('chartName'), entry)
+    return jsonify({'message': 'Post successful'}), 200
+
 
 if __name__ == '__main__':
     load_dotenv()
