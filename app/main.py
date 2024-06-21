@@ -118,8 +118,7 @@ def enter_data():
 def save_new_data():
     data = request.json
     '''it should be idToken b/c we are OAuth verified'''
-    
-    datasets = get_datasets(session.get('idToken'), data.get('chartName'))
+    datasets = get_datasets(session.get('idToken', ''), data.get('chartName'))
     for ind, dataset in enumerate(datasets):
         if dataset['label'] == data.get('datasetlabel'):
             break
@@ -132,7 +131,9 @@ def save_new_data():
         'labels': data.get('labels'),
         'datasets': datasets
     }
-    save_chart_data(session.get('idToken'), data.get('chartName'), entry)
+    res = save_chart_data(session.get('idToken'), data.get('chartName'), entry)
+    if not res:
+        return jsonify({'error': 'Failed to save data'}), 500
     return jsonify({'message': 'Post successful'}), 200
 
 

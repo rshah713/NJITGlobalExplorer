@@ -44,6 +44,12 @@
 
 {% block content %}
 <div class="container mt-5">
+    <div id="success-alert" class="alert alert-success" style="display: none;">
+        Your data has been successfully saved.
+    </div>
+    <div id="error-alert" class="alert alert-danger" style="display: none;">
+        Error saving data.
+    </div>
     <h1 class="text-center">Data Entry Page</h1>
     <form>
         <div class="form-group">
@@ -73,7 +79,7 @@
                     <!-- Input fields will be added here -->
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3" onclick="saveData()">Save</button>
+            <button type="submit" class="btn btn-primary mt-3" onclick="saveData(event)">Save</button>
         </div>
     </form>
 </div>
@@ -170,7 +176,8 @@
             document.getElementById('axisInputs').style.display = 'none';
         }
     }
-function saveData() {
+function saveData(event) {
+    event.preventDefault();
     const labelsContainer = document.querySelector('.labels-container');
     const valuesContainer = document.querySelector('.values-container');
     const labelInputs = labelsContainer.querySelectorAll('input');
@@ -200,10 +207,21 @@ function saveData() {
         },
         body: JSON.stringify(payload)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('success-alert').style.display = 'block';
+            setTimeout(() => document.getElementById('success-alert').style.display = 'none', 3000);
+        } else {
+            document.getElementById('error-alert').style.display = 'block';
+            setTimeout(() => document.getElementById('error-alert').style.display = 'none', 3000);
+        }
+        return response.json();
+    })
     .then(data => console.log(data))
     .catch((error) => {
         console.error('Error:', error);
+        document.getElementById('error-alert').style.display = 'block';
+        setTimeout(() => document.getElementById('error-alert').style.display = 'none', 3000);
     });
 }
 </script>
