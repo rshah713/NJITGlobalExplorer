@@ -75,6 +75,14 @@
                 <canvas id="durationCtx"></canvas>
             </div>
         </div>
+        <div class="row">
+            <div class="chart-container">
+                <canvas id="culturalCompetenceCtx"></canvas>
+            </div>
+            <div class="text-container" id="culturalCompetenceText">
+                <p></p>
+            </div>
+        </div>
         <!-- Additional rows can be added here -->
     </div>
 
@@ -93,6 +101,15 @@
                     var durationCtx = document.getElementById('durationCtx').getContext('2d');
                     var durationTextContainer = document.querySelector("#durationText p");
                     durationTextContainer.textContent = data.description.durationData;
+
+                    var culturalCompetenceCtx = document.getElementById('culturalCompetenceCtx').getContext('2d');
+                    var culturalCompetenceTextContainer = document.querySelector("#culturalCompetenceText p");
+                    culturalCompetenceTextContainer.textContent = "this is cultural competence";
+
+                    const culturalData = {
+                        
+                    }
+
                     const durationConfig = {
                         type: 'bar',
                         data: data.durationData,
@@ -158,15 +175,68 @@
                             },
                         },
                     };
+                    const culturalCompetenceConfig = {
+                        type: 'bar',
+                        data: data.culturalCompetence,
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                x: {
+                                    min: -100,
+                                    max: 100,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value !== 0 ? value : '';
+                                        }
+                                    }
+                                },
+                                y: {
+                                    stacked: true // stack y-axis bars
+                                },
+                            },
+                            // Elements options apply to all of the options unless overridden in a dataset
+                            // In this case, we are setting the border of each horizontal bar to be 2px wide
+                            // elements: {
+                            //     bar: {
+                            //         borderWidth: 2,
+                            //     }
+                            // },
+                            responsive: true,
+                            // plugins: {
+                            //     legend: {
+                            //         position: 'right',
+                            //     },
+                            // }
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Chart.js Horizontal Bar Chart'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            const datasetLabel = tooltipItem.dataset.label || '';
+                                            const value = Math.abs(tooltipItem.raw);
+                                            return `${datasetLabel}: ${value}`;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    };
 
-                    const myChart = new Chart(
+                    const participationChart = new Chart(
                         participationCtx,
                         participationConfig
                     );
-                    myChart.options.elements.line.tension = 0.4;
-                    myChart.update();
+                    participationChart.options.elements.line.tension = 0.4;
+                    participationChart.update();
 
                     const durationChart = new Chart(durationCtx, durationConfig);
+                    const culturalCompetenceChart = new Chart(culturalCompetenceCtx, culturalCompetenceConfig);
+                    data.culturalCompetence.datasets[0].data = data.culturalCompetence.datasets[0].data.map((value) => value);
+                    data.culturalCompetence.datasets[1].data = data.culturalCompetence.datasets[1].data.map((value) => -value);
+                    culturalCompetenceChart.update();
 
                     
                 })

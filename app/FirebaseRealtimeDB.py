@@ -118,51 +118,28 @@ def get_datasets(idToken, chartName):
 # idToken = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImRmOGIxNTFiY2Q5MGQ1YjMwMjBlNTNhMzYyZTRiMzA3NTYzMzdhNjEiLCJ0eXAiOiJKV1QifQ.eyJwcm92aWRlcl9pZCI6ImFub255bW91cyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9uaml0Z2xvYmFsZXhwbG9yZXIiLCJhdWQiOiJuaml0Z2xvYmFsZXhwbG9yZXIiLCJhdXRoX3RpbWUiOjE3MTgyMTkxOTIsInVzZXJfaWQiOiI3a3RGQ1ZJN0I2aFRIVmJHNkNBeWo5SzFsazkzIiwic3ViIjoiN2t0RkNWSTdCNmhUSFZiRzZDQXlqOUsxbGs5MyIsImlhdCI6MTcxODIxOTE5MiwiZXhwIjoxNzE4MjIyNzkyLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7fSwic2lnbl9pbl9wcm92aWRlciI6ImFub255bW91cyJ9fQ.cshii3FAkEveb8it6E26hmt2pDQ3SCf6ccyDcIYZlsz1Oh4FSTs4NhKAiH7IEsDrxBFR4UuJOayBR0fN6XjnkJOPN5KHPyxm0I_AhCxreNc_HOJGA-TkMFBbXil9S17efdjBELJhQe9gEUnX8BXTE2wpkLtq5XP80ZWBEze6y13LNTCWQBix8XocpQqZd2A1bXHqy2DNO7WRCZR12VPT8I67I-68x6o2bN_TqfD6XOku0Bl0Tm--4C7_u5tHV8CgGX98EyKUaCzSD3AasXSWLRNURE63h6ouHKYPgLekd5CJT8_NDgLqHRKWyDiQjTGEc4_EzqkT6FcElrfIQbDAHg'
 
 # idToken, refreshToken = create_temp_user()
-data = {
-    "labels": [2018, 2019, 2020, 2021, 2022],
-    "datasets": [
-        {
-            "label": 'National - Semester',
-            "data": [30.3, 30.7, 62.7, 26.3, 30.3],
-            "borderColor": 'rgba(75, 192, 192, 1)',
-            "backgroundColor": 'rgba(75, 192, 192, 1)',
-            "fill": 'start'
-        },
-        {
-            "label": "NJIT - Semester",
-            "data": [38.5, 38.6, 5.9, 57.7, 49],
-            "borderColor": 'rgba(153, 102, 255, 1)',
-            "backgroundColor": 'rgba(153, 102, 255, 1)',
-        },
-        {
-            "label": "National - Summer",
-            "data": [30, 40, 45.5, 50, 53.6],
-            "borderColor": 'rgba(255, 159, 64, 1)',
-            "backgroundColor": 'rgba(255, 159, 64, 1)',
-        },
-        {
-            "label": "NJIT - Summer",
-            "data": [50, 45.3, 54.6, 32.5, 21.1],
-            "borderColor": 'rgba(54, 162, 235, 1)',
-            "backgroundColor": 'rgba(54, 162, 235, 1)',
-        }
-    ]
-};
 
-dataset_inner = [{
-            "label": "NJIT - Summer",
-            "data": [50, 45.3, 54.6, 32.5, 21.0],
-            "borderColor": 'rgba(54, 162, 235, 1)',
-            "backgroundColor": 'rgba(54, 162, 235, 1)',
-        }]
 
-# refreshToken = 'AMf-vByVzqL8eKcdylRmeLTl7ghSsr8XqJIB3KHEsa4Vi80_OCLL9ArU7-eckDwmrMRRdpTD3RqXOZzAjAI1mVu0f3L-fLKHshfaigrYO_UbrwuPstbvJTZtiB7xpb67yIaCUyTO28YqV-d6vTdSTF_6JlkKDeycKCFP2hwp0weINuCaLaZG_338iyEkRLtwVHthPjkwvoxi'
-# idToken = create_temp_user()[0]
-# # # save_chart_data(idToken, 'newChartData', data)
-# ENDPOINT = get_firebase_db_url() + 'data/newChartData.json'
-# payload = {'datasets': dataset_inner}
-# make_firebase_request(ENDPOINT, payload, idToken=idToken)
-
-# desc = "The dataset provides information on the duration of study abroad participants from NJIT and National Study Abroad Programs. The data shows that the National Study Abroad Programs have a generally increasing trend, with a slight dip in 2020. In contrast, NJIT Study Abroad Programs have a more fluctuating trend, with a significant increase in 2020. The data also suggests that NJIT Study Abroad Programs have a higher participation rate in summer programs compared to semester programs. The data suggests NJIT Study Abroad should consider increasing marketing efforts for semester programs, as the participation rate has been consistently lower than summer programs, as seen in the 2022 data where only 30.3% of participants went on semester programs compared to 53.6% on summer programs."
-# save_chart_description(idToken, "durationData", desc)
-
+if __name__ == "__main__":
+    data = {
+                'labels': ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                'datasets': [
+                    {
+                        'label': 'Dataset A',
+                        'data': [100, 90, 80, 70, 60, 50, 40],
+                        'backgroundColor': 'rgba(54, 162, 235, 0.2)',
+                        'borderColor': 'rgba(54, 162, 235, 1)',
+                        'borderWidth': 1
+                    },
+                    {
+                        'label': 'Dataset B',
+                        'data': [100, 90, 80, 70, 60, 50, 40],
+                        'backgroundColor': 'rgba(255, 99, 132, 0.2)',
+                        'borderColor': 'rgba(255, 99, 132, 1)',
+                        'borderWidth': 1
+                    }
+                ]
+            }
+    idToken = create_temp_user()[0]
+    save_chart_data(idToken, 'culturalCompetence', data)
+    
