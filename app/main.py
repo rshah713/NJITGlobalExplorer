@@ -5,7 +5,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, j
 from dotenv import load_dotenv
 
 from FirebaseRealtimeDB import get_admin_users, create_temp_user, refresh_token, get_datasets, \
-      get_chart_data as get_firebase_chart_data, save_chart_data
+      get_chart_data as get_firebase_chart_data, save_chart_data, save_chart_description
 import llm
 
 
@@ -120,9 +120,8 @@ def save_new_data():
     '''it should be idToken b/c we are OAuth verified'''
     datasets = get_datasets(session.get('idToken', ''), data.get('chartName'))
     for ind, dataset in enumerate(datasets):
-        if dataset['label'] == data.get('datasetlabel'):
+        if dataset['label'] == data.get('datasetLabel'):
             break
-
     # replace new entry
     datasets[ind]['data'] = data.get('data')
 
@@ -132,10 +131,26 @@ def save_new_data():
         'datasets': datasets
     }
     res = save_chart_data(session.get('idToken'), data.get('chartName'), entry)
+    # res = False
     if not res:
         return jsonify({'error': 'Failed to save data'}), 500
+    
+    llm_msg = {data.get('chartName'): entry}
+    llm_response = llm.generate_dataset_paragraph(llm_msg)
+    save_chart_description(session.get('idToken'), data.get('chartName'), llm_response)
     return jsonify({'message': 'Post successful'}), 200
 
+@app.route('/admin')
+def admin():
+    if not session.get('idToken', False):
+        if not session.get('guest_idToken', False):
+            session['guest_idToken'], session['refreshToken'] = create_temp_user()
+            idToken = session['guest_idToken']
+        else:
+            idToken = session.get('guest_idToken')
+    else:
+        idToken = session.get('idToken')
+    return jsonify(get_admin_users(idToken)), 200
 
 if __name__ == '__main__':
     load_dotenv()

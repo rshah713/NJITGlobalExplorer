@@ -95,7 +95,7 @@ def main():
         resp = request.urlopen(req)
         resp = resp.read().decode('utf-8')
         resp = json.loads(resp)
-        print(resp)
+        # print(resp)
     except error.HTTPError as e:
         print(f"Error: {e} to {ENDPOINT}")
         

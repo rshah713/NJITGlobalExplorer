@@ -63,7 +63,7 @@
                 <canvas id="abroadParticipationCtx"></canvas>
             </div>
             <div class="text-container" id="abroadParticipationText">
-                <p>This is chart 3</p>
+                <p></p>
             </div>
         </div>
     
@@ -87,6 +87,9 @@
                 .then(data => {
                     // Assuming 'data' contains 'data1' and 'data2' from the backend
                     var participationCtx = document.getElementById('abroadParticipationCtx').getContext('2d');
+                    var participationTextContainer = document.querySelector('#abroadParticipationText p')
+                    participationTextContainer.textContent = data.description.abroadParticipation;
+
                     var durationCtx = document.getElementById('durationCtx').getContext('2d');
                     var durationTextContainer = document.querySelector("#durationText p");
                     durationTextContainer.textContent = data.description.durationData;
@@ -114,9 +117,8 @@
                                 legend: {
                                     position: 'top',
                                     onClick: function(mouseEvent, legendItem, legend) {
-
-                                        // ToDo: when adding new data, make checkbox UI that autoappends NJIT - {val} or National - {val}
-                                        // so when we pair it always finds smthn
+                                        // this logic assumes for every NJIT - {}, there is an equivelent National - {}
+                                        // and vice-versa
                                         const chart = legend.chart;
                                         const label = legendItem.text;
                                         const label2 = label.includes("NJIT") ? label.replace("NJIT", "National") : label.replace("National", "NJIT");
