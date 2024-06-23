@@ -122,40 +122,38 @@ def get_datasets(idToken, chartName):
 
 if __name__ == "__main__":
     data = {
-                'labels': ['Knowledge about another culture',
-                           'Ability to speak a foreign language',
-                           'Interest in global issues',
-                           'Involvement with a global issue',
-                           'Defining political views',],
+                'labels': ['Helped develop job-related skills',
+                           'Directly led to first job placement',
+                           'Got into desired graduate school'],
                 'datasets': [
                     {
                         'label': 'National',
-                        'data': [100, 90, 80, 70, 60],
-                        'backgroundColor': 'rgba(54, 162, 235, 0.2)',
-                        'borderColor': 'rgba(54, 162, 235, 1)',
+                        'data': [79, 50, 90],
+                        'backgroundColor': 'rgba(255, 159, 64, 0.2)',
+                        'borderColor': 'rgba(255, 159, 64, 1)',
                         'borderWidth': 1
                     },
                     {
                         'label': 'NJIT',
-                        'data': [100, 90, 80, 70, 60],
-                        'backgroundColor': 'rgba(255, 99, 132, 0.2)',
-                        'borderColor': 'rgba(255, 99, 132, 1)',
+                        'data': [38, 93, 63],
+                        'backgroundColor': 'rgba(255, 255, 0, 0.2)',
+                        'borderColor': 'rgba(255, 255, 0, 1)',
                         'borderWidth': 1
                     }
                 ]
             }
     idToken = create_temp_user()[0]
-    # save_chart_data(idToken, 'culturalCompetence', data)
-    c = get_chart_data(idToken)['abroadParticipation']['datasets'][1]
+    save_chart_data(idToken, 'professional', data)
+    # c = get_chart_data(idToken)['abroadParticipation']['datasets'][1]
     # c['spanGaps'] = True
-    l = [1.01]*51
-    c['data'] = l
-    print(c)
-    ENDPOINT = get_firebase_db_url() + 'data/abroadParticipation/datasets/1.json' + f'?auth={idToken}'
-    payload = json.dumps(c).encode()
-    HEADERS = {"content-type": "application/json; charset=UTF-8" }
-    req = request.Request(ENDPOINT, data=payload, headers=HEADERS, method="PATCH")
-    resp = request.urlopen(req)
-    resp = resp.read().decode('utf-8')
-    resp = json.loads(resp)
-    print(resp)
+    # l = [1.01]*51
+    # c['data'] = l
+    # print(c)
+    # ENDPOINT = get_firebase_db_url() + 'data/abroadParticipation/datasets/1.json' + f'?auth={idToken}'
+    # payload = json.dumps(c).encode()
+    # HEADERS = {"content-type": "application/json; charset=UTF-8" }
+    # req = request.Request(ENDPOINT, data=payload, headers=HEADERS, method="PATCH")
+    # resp = request.urlopen(req)
+    # resp = resp.read().decode('utf-8')
+    # resp = json.loads(resp)
+    # print(resp)

@@ -83,6 +83,14 @@
                 <p></p>
             </div>
         </div>
+        <div class="row">
+            <div class="text-container" id="professionalText">
+                <p></p>
+            </div>
+            <div class="chart-container">
+                <canvas id="professionalCtx"></canvas>
+            </div>
+        </div>
         <!-- Additional rows can be added here -->
     </div>
 
@@ -105,6 +113,10 @@
                     var culturalCompetenceCtx = document.getElementById('culturalCompetenceCtx').getContext('2d');
                     var culturalCompetenceTextContainer = document.querySelector("#culturalCompetenceText p");
                     culturalCompetenceTextContainer.textContent = data.description.culturalCompetence;
+
+                    var professionalCtx = document.getElementById('professionalCtx').getContext('2d');
+                    var professionalTextContainer = document.querySelector("#professionalText p");
+                    professionalTextContainer.textContent = data.description.professional;
 
                     const durationConfig = {
                         type: 'bar',
@@ -164,6 +176,19 @@
                                     display: true,
                                     text: 'Study Abroad Participation (%)'
                                 },
+                                callbacks: {
+                                        label: function(context) {
+                                            var label = context.dataset.label || '';
+
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.y !== null) {
+                                                label += context.parsed.y + '%';
+                                            }
+                                            return label;
+                                        }
+                                    },
                             },
                             interaction: {
                                 intersect: false,
@@ -192,19 +217,65 @@
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Cultural Competance from Study Abroad'
+                                    text: 'Cultural Competence from Study Abroad (%)'
                                 },
                                 tooltip: {
                                     callbacks: {
                                         label: function(tooltipItem) {
                                             const datasetLabel = tooltipItem.dataset.label || '';
                                             const value = Math.abs(tooltipItem.raw);
-                                            return `${datasetLabel}: ${value}`;
+                                            return `${datasetLabel}: ${value}%`;
                                         }
                                     }
                                 }
                             }
                         },
+                    };
+
+                    const professionalConfig = {
+                        type: 'bar',
+                        data: data.professional,
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Career Readiness from Study Abroad (%)'
+                                },
+                            },
+                            responsive: true,
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            var label = context.dataset.label || '';
+
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.y !== null) {
+                                                label += context.parsed.y + '%';
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    ticks: {
+                                        maxRotation: 0,
+                                        minRotation: 0,
+                                        font: {
+                                            size: 10, // reduce font size to prevent overlap
+                                        }
+                                    }
+                                },
+                                y: {
+                                    stacked: true
+                                }
+                            }
+                        }
                     };
 
                     const participationChart = new Chart(
@@ -220,6 +291,8 @@
                     data.culturalCompetence.datasets[0].data = data.culturalCompetence.datasets[0].data.map((value) => value);
                     data.culturalCompetence.datasets[1].data = data.culturalCompetence.datasets[1].data.map((value) => -value);
                     culturalCompetenceChart.update();
+
+                    const professionalChart = new Chart(professionalCtx, professionalConfig);
 
                     
                 })
