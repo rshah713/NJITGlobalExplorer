@@ -38,7 +38,7 @@ def get_dataset_info(chartName):
             The NJIT line is consistent as it \
             represents % of NJIT students that study abroad in general at the university. When analyzing the NJIT line, ignore any state related info, \
                 only use State related info for National dataset.'
-    elif chartName == 'culturalCompetence':
+    elif chartName == 'culturalCompetence' or chartName == 'professional':
         desc = "The labels represent questions asked to study abroad participants. Each dataset contains the % of people who resonate with the statement."
     else:
         desc = None
