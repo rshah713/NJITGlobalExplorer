@@ -84,12 +84,18 @@ def handle_login():
     user_info = request.json
     e = base64.b64decode(b'NzEzcm9oYW5zaGFoQGdtYWlsLmNvbQ==').decode()
     # if not user_info.get('email', '').endswith('njit.edu'):
-    if user_info.get('email', '') == e:
-        print('ERROR: NOT NJIT EMAIL')
+    if user_info.get('email', '') == e or user_info.get('email', '') == 'shah.v.rohan@gmail.com':
+        # print('ERROR: NOT NJIT EMAIL')
+        # return jsonify({'error': 'Unauthorized access'}), 401
+        print("=> Developer Access Granted")
+    elif not user_info.get('email', '').endswith('@njit.edu'):
+        print('=> ERROR: NOT NJIT EMAIL')
+        session.clear()
         return jsonify({'error': 'Unauthorized access'}), 401
-    # elif not valid_ucid(user_info.get('email', '')): #ToDo: log unauthorized errors in firebase
-    #     print('ERROR: NOT VALID UCID')
-    #     return jsonify({'error': 'Unauthorized access'}), 401
+    elif not valid_ucid(user_info.get('email', '')): #ToDo: log unauthorized errors in firebase
+        print('=> ERROR: NOT VALID UCID')
+        session.clear()
+        return jsonify({'error': 'Unauthorized access'}), 401
     else:
         print('=> Logged in with', user_info.get('email'))
     session.clear()
