@@ -215,6 +215,8 @@ function saveData(event) {
             document.getElementById('error-alert').style.display = 'block';
             setTimeout(() => document.getElementById('error-alert').style.display = 'none', 3000);
         }
+        // Scroll to the top of the page after saving
+        window.scrollTo(0, 0);
         return response.json();
     })
     .then(data => console.log(data))

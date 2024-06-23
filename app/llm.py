@@ -24,7 +24,6 @@ user_query: {user_prompt}
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": formatted_user}
     ]
-    print(messages)
     response = client.chat.completions.create(
     model="meta-llama/Llama-3-8b-chat-hf",
     messages=messages,

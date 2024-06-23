@@ -5,7 +5,8 @@ from flask import Flask, redirect, url_for, render_template, request, session, j
 from dotenv import load_dotenv
 
 from FirebaseRealtimeDB import get_admin_users, create_temp_user, refresh_token, get_datasets, \
-      get_chart_data as get_firebase_chart_data, save_chart_data, save_chart_description
+      get_chart_data as get_firebase_chart_data, save_chart_data, save_chart_description, \
+      get_admin_users, add_admin_user
 import llm
 
 
@@ -151,6 +152,33 @@ def admin():
     else:
         idToken = session.get('idToken')
     return jsonify(get_admin_users(idToken)), 200
+
+@app.route('/add_new_admin')
+def add_new_admin():
+    if session.get('idToken') is None:
+        print("=> Invalid Auth for /add_new_admin, redirecting...")
+        return redirect(url_for('index'))
+    return render_template('add_new_admin.html')
+
+@app.route('/save_new_admin', methods=["POST"])
+def save_new_admin():
+    new_ucid = request.json.get('ucid')
+    new_ucid = new_ucid.replace(' ', '')
+    ucid_temp = new_ucid.replace('.', '').replace('_', '') # safe chars
+    if new_ucid.find('@') != -1:
+        return jsonify({'error': 'Must be valid UCID [not email]'}), 400
+    elif len(new_ucid) < 3:
+        return jsonify({'error': 'Must be valid UCID'}), 400
+    elif not ucid_temp.isalnum():
+        return jsonify({'error': 'Must be valid UCID [no special chars]'}), 400
+    curr_users = get_admin_users(session.get('idToken')) # verified by /add_new_admin
+    if new_ucid in curr_users:
+        print(f'=> ERROR: {new_ucid} already exists in CURR_USERS')
+        return jsonify({'error': 'Admin with UCID already exists'}), 409
+    res = add_admin_user(session.get('idToken'), curr_users, new_ucid)
+    if not res:
+        return jsonify({'error': 'Failed to save data'}), 500
+    return jsonify({'message': 'Data saved successfully!'}), 200
 
 if __name__ == '__main__':
     load_dotenv()

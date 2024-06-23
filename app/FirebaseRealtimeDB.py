@@ -70,15 +70,8 @@ def refresh_token(refreshToken):
     print("ERROR: Failed to refreshToken")
     return False
 
-def add_admin_user(idToken, new_ucid):
+def add_admin_user(idToken, curr_users, new_ucid):
     ENDPOINT = get_firebase_db_url() + '.json'
-    curr_users = get_admin_users(idToken)
-    if not curr_users:
-        print(f'ERROR: Could not add {new_ucid} as could not read CURR_USERS from Firebase')
-        return False
-    elif new_ucid in curr_users:
-        print(f'ERROR: {new_ucid} already exists in CURR_USERS')
-        return True
     curr_users.append(new_ucid)
     payload = {'users': curr_users}
     return make_firebase_request(ENDPOINT, payload, idToken=idToken)
@@ -124,7 +117,7 @@ if __name__ == "__main__":
     data = {
                 'labels': ['Helped develop job-related skills',
                            'Directly led to first job placement',
-                           'Got into desired graduate school'],
+                           'Got into desired graduate school']*50,
                 'datasets': [
                     {
                         'label': 'National',
@@ -143,7 +136,7 @@ if __name__ == "__main__":
                 ]
             }
     idToken = create_temp_user()[0]
-    save_chart_data(idToken, 'professional', data)
+    save_chart_data(idToken, 'newChartData', data)
     # c = get_chart_data(idToken)['abroadParticipation']['datasets'][1]
     # c['spanGaps'] = True
     # l = [1.01]*51
