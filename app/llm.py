@@ -42,12 +42,18 @@ def get_dataset_info(chartName):
     return None
 
 def generate_dataset_paragraph(dataset, dataset_info=None):
-    system_prompt = '''You are a data-analysis agent tasked with generating 6-8 sentence descriptions of a dataset. Do not use first-person pronouns. \
-        Give a good summary of the data as a whole and include a brief comparative analysis between NJIT and National Study Abroad Programs. \
-            It should be 6-8 sentences and it should be very specific. If the datapoints are less than the labels, assume, the rest of the points are null.\
-                Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...).\
-                    The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')'''
-
+    if list(dataset.keys())[0] != 'abroadParticipation':
+        system_prompt = '''You are a data-analysis agent tasked with generating 6-8 sentence descriptions of a dataset. Do not use first-person pronouns. \
+            Give a good summary of the data as a whole and include a brief comparative analysis between NJIT and National Study Abroad Programs. \
+                It should be 6-8 sentences and it should be very specific. If the datapoints are less than the labels, assume, the rest of the points are null.\
+                    Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...).\
+                        The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')'''
+    else:
+        system_prompt = '''You are a data-analysis agent tasked with generating 6-8 sentence descriptions of a dataset. Do not use first-person pronouns. \
+            Give a good summary of the data as a whole and include a brief analysis of NJIT and National Study Abroad Programs seperately. \
+                It should be 6-8 sentences and it should be very specific. If the datapoints are less than the labels, assume, the rest of the points are null.\
+                    Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...).\
+                        The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')'''
     if dataset_info is None:
         dataset_info = get_dataset_info(list(dataset.keys())[0])
     return make_request(dataset, dataset_info, 'Find some trends in this data', system_prompt=system_prompt)
