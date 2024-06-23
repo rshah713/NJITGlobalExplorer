@@ -104,11 +104,7 @@
 
                     var culturalCompetenceCtx = document.getElementById('culturalCompetenceCtx').getContext('2d');
                     var culturalCompetenceTextContainer = document.querySelector("#culturalCompetenceText p");
-                    culturalCompetenceTextContainer.textContent = "this is cultural competence";
-
-                    const culturalData = {
-                        
-                    }
+                    culturalCompetenceTextContainer.textContent = data.description.culturalCompetence;
 
                     const durationConfig = {
                         type: 'bar',
@@ -141,7 +137,6 @@
                                         const label2 = label.includes("NJIT") ? label.replace("NJIT", "National") : label.replace("National", "NJIT");
                                         firstLabelIndex = chart.data.datasets.findIndex(dataset => dataset.label === label);
                                         secondLabelIndex = chart.data.datasets.findIndex(dataset => dataset.label === label2);
-                                        console.log(label2);
                                         const isVisible = chart.isDatasetVisible(firstLabelIndex);
                                         chart.getDatasetMeta(firstLabelIndex).hidden = isVisible;
                                         chart.getDatasetMeta(secondLabelIndex).hidden = isVisible;
@@ -182,8 +177,6 @@
                             indexAxis: 'y',
                             scales: {
                                 x: {
-                                    min: -100,
-                                    max: 100,
                                     ticks: {
                                         callback: function(value) {
                                             return value !== 0 ? value : '';
@@ -194,23 +187,12 @@
                                     stacked: true // stack y-axis bars
                                 },
                             },
-                            // Elements options apply to all of the options unless overridden in a dataset
-                            // In this case, we are setting the border of each horizontal bar to be 2px wide
-                            // elements: {
-                            //     bar: {
-                            //         borderWidth: 2,
-                            //     }
-                            // },
                             responsive: true,
-                            // plugins: {
-                            //     legend: {
-                            //         position: 'right',
-                            //     },
-                            // }
+
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Chart.js Horizontal Bar Chart'
+                                    text: 'Cultural Competance from Study Abroad'
                                 },
                                 tooltip: {
                                     callbacks: {
@@ -233,6 +215,7 @@
                     participationChart.update();
 
                     const durationChart = new Chart(durationCtx, durationConfig);
+                    
                     const culturalCompetenceChart = new Chart(culturalCompetenceCtx, culturalCompetenceConfig);
                     data.culturalCompetence.datasets[0].data = data.culturalCompetence.datasets[0].data.map((value) => value);
                     data.culturalCompetence.datasets[1].data = data.culturalCompetence.datasets[1].data.map((value) => -value);

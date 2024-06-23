@@ -122,18 +122,22 @@ def get_datasets(idToken, chartName):
 
 if __name__ == "__main__":
     data = {
-                'labels': ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                'labels': ['Knowledge about another culture',
+                           'Ability to speak a foreign language',
+                           'Interest in global issues',
+                           'Involvement with a global issue',
+                           'Defining political views',],
                 'datasets': [
                     {
-                        'label': 'Dataset A',
-                        'data': [100, 90, 80, 70, 60, 50, 40],
+                        'label': 'National',
+                        'data': [100, 90, 80, 70, 60],
                         'backgroundColor': 'rgba(54, 162, 235, 0.2)',
                         'borderColor': 'rgba(54, 162, 235, 1)',
                         'borderWidth': 1
                     },
                     {
-                        'label': 'Dataset B',
-                        'data': [100, 90, 80, 70, 60, 50, 40],
+                        'label': 'NJIT',
+                        'data': [100, 90, 80, 70, 60],
                         'backgroundColor': 'rgba(255, 99, 132, 0.2)',
                         'borderColor': 'rgba(255, 99, 132, 1)',
                         'borderWidth': 1
@@ -141,5 +145,17 @@ if __name__ == "__main__":
                 ]
             }
     idToken = create_temp_user()[0]
-    save_chart_data(idToken, 'culturalCompetence', data)
-    
+    # save_chart_data(idToken, 'culturalCompetence', data)
+    c = get_chart_data(idToken)['abroadParticipation']['datasets'][1]
+    # c['spanGaps'] = True
+    l = [1.01]*51
+    c['data'] = l
+    print(c)
+    ENDPOINT = get_firebase_db_url() + 'data/abroadParticipation/datasets/1.json' + f'?auth={idToken}'
+    payload = json.dumps(c).encode()
+    HEADERS = {"content-type": "application/json; charset=UTF-8" }
+    req = request.Request(ENDPOINT, data=payload, headers=HEADERS, method="PATCH")
+    resp = request.urlopen(req)
+    resp = resp.read().decode('utf-8')
+    resp = json.loads(resp)
+    print(resp)
