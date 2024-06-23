@@ -1,22 +1,27 @@
-# NJITGlobalExplorer
-NJIT Global Explorer is a full-stack interactive dashboard for NJIT Study Abroad Analytics. It is designed to be used by the NJIT Office of Global Initiatives to analyze and visualize the data from the Study Abroad program. This project is built using Flask, a Python web framework, and Firebase for data storage and user authentication. Additionally, it features an LLM-powered backend to analyze and draw conclusions on the data.
+# NJIT Global Explorer
+Welcome to the [NJIT Global Explorer](https://github.com/yourusername/NJITGlobalExplorer), a comprehensive, full-stack interactive dashboard designed specifically for the analysis and visualization of NJIT's Study Abroad Program data. This tool is intended for use by the NJIT Office of Global Initiatives, providing them with a powerful resource to draw meaningful insights from the program's data.
 
-## Project Funding and Recognition
-This project is funded and conducted through the NJIT Honors Summer Research Institute as a paid research project analyzing the impact of the NJIT Study Abroad Program. This project was presented at the NJIT Undergraduate Summer Research Symposium.
+The NJIT Global Explorer is built on [Flask](https://flask.palletsprojects.com/), a robust Python web framework, and utilizes [Firebase](https://firebase.google.com/) for secure data storage and user authentication. A unique feature of this project is its LLM-powered backend, which is capable of analyzing data and drawing significant conclusions.
+
+## Project Funding and Accolades
+The NJIT Global Explorer is a product of the NJIT Honors Summer Research Institute, where it was developed as a paid research project. The project's primary focus is to analyze the impact of the NJIT Study Abroad Program. The project has been recognized and presented at the NJIT Undergraduate Summer Research Symposium.
 
 ## Getting Started
-These instructions will provide you with a copy of the project up and running on your local machine for development and testing purposes.
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-- Python 3.6 or higher
-- pip (Python package installer)
-- A Firebase account and a new project for testing
+Ensure you have the following installed on your system:
+- [Python 3.6 or higher](https://www.python.org/downloads/)
+- [pip (Python package installer)](https://pip.pypa.io/en/stable/installation/)
+- A [Firebase account](https://firebase.google.com/) and a new project for testing
 
 ### Installation
+Follow these steps to set up the project:
 1. Clone the repository to your local machine using `git clone https://github.com/yourusername/NJITGlobalExplorer.git`
 2. Navigate to the project directory using `cd NJITGlobalExplorer`
 3. Install the required Python packages using `pip install -r requirements.txt`
-4. Create a `.env` file in the root directory and fill it with your Firebase project credentials (API key, database URL, etc.)
-5. Register for the meta-llama/Llama-3-8b-chat-hf LLM model using together.ai and obtain your API key.
+4. Create a `.env` file in the root directory and populate it with your Firebase project credentials (API key, database URL, etc.)
+5. Register for the [meta-llama/Llama-3-8b-chat-hf LLM model](https://together.ai/) and obtain your API key.
 6. Add the together.ai API key to your `.env` file.
-7. Start the Flask server using `python main.py`, and visit `http://127.0.0.1:5000`
+7. Start the Flask server using `python main.py`, and visit `http://127.0.0.1:5000` to view the project.
+
