@@ -1,5 +1,5 @@
 # NJIT Global Explorer
-Welcome to the [NJIT Global Explorer](https://github.com/yourusername/NJITGlobalExplorer), a comprehensive, full-stack interactive dashboard designed specifically for the analysis and visualization of NJIT's Study Abroad Program data. This tool is intended for use by the NJIT Office of Global Initiatives, providing them with a powerful resource to draw meaningful insights from the program's data.
+Welcome to the [NJIT Global Explorer](https://github.com/rshah713/NJITGlobalExplorer), a comprehensive, full-stack interactive dashboard designed specifically for the analysis and visualization of NJIT's Study Abroad Program data. This tool is intended for use by the NJIT Office of Global Initiatives, providing them with a powerful resource to draw meaningful insights from the program's data.
 
 ## Technologies
 The NJIT Global Explorer is built using a variety of modern technologies:
@@ -25,7 +25,7 @@ Ensure you have the following installed on your system:
 
 ### Installation
 Follow these steps to set up the project:
-1. Clone the repository to your local machine using `git clone https://github.com/yourusername/NJITGlobalExplorer.git`
+1. Clone the repository to your local machine using `git clone https://github.com/rshah713/NJITGlobalExplorer.git`
 2. Navigate to the project directory using `cd NJITGlobalExplorer`
 3. Install the required Python packages using `pip install -r requirements.txt`
 4. Create a `.env` file in the root directory and populate it with your Firebase project credentials (API key, database URL, etc.)
