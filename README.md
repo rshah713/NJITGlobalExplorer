@@ -1,5 +1,6 @@
 # NJIT Global Explorer
-Welcome to the [NJIT Global Explorer](https://github.com/rshah713/NJITGlobalExplorer), a comprehensive, full-stack interactive dashboard designed specifically for the analysis and visualization of NJIT's Study Abroad Program data. This tool is intended for use by the NJIT Office of Global Initiatives, providing them with a powerful resource to draw meaningful insights from the program's data.
+Welcome to the [NJIT Global Explorer](https://njitglobalexplorer.me), a comprehensive, full-stack interactive dashboard designed specifically for the analysis and visualization of NJIT's Study Abroad Program data. This tool is intended for use by the NJIT Office of Global Initiatives, providing them with a powerful resource to draw meaningful insights from the program's data.
+> NJIT Global Explorer is live at [njitglobalexplorer.me](https://njitglobalexplorer.me)
 
 ## Technologies
 The NJIT Global Explorer is built using a variety of modern technologies:
