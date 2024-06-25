@@ -1,3 +1,4 @@
+import socket
 import os
 import base64
 
@@ -188,7 +189,11 @@ def save_new_admin():
 
 if __name__ == '__main__':
     load_dotenv()
-    app.run(debug=True)
+    if os.getenv('DEV_MODE', 'False') == 'True':
+        app.run(debug=True, host=os.getenv('HOSTNAME'))
+    else:
+        app.run(debug=True)
+
     # secret passphrase: 'secret'
     # https://kracekumar.com/post/54437887454/ssl-for-flask-local-development/ (but use 2048-bit keys)
 
