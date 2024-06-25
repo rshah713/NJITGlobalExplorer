@@ -31,6 +31,28 @@
         color: #d19a66; /* Soft orange for hover */
         text-decoration: underline;
     }
+    .source-list {
+        list-style-type: none;
+    }
+    .source-list li {
+        margin-bottom: 10px;
+    }
+    .source-list a {
+        font-weight: bold;
+    }
+    .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #abb2bf;
+    }
+    .footer a {
+        color: #61afef;
+        text-decoration: none;
+    }
+    .footer a:hover {
+        text-decoration: underline;
+    }
 </style>
 {% endblock %}
 
@@ -40,11 +62,26 @@
     <p class="lead text-center about-text">This project is a research initiative to determine the impact of the NJIT Study Abroad Program. Our goal is to understand and enhance the experiences of students participating in global educational opportunities.</p>
     
     <div class="row mt-5">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="text-center about-header">Data Sources for Charts</h2>
+            <ul class="source-list">
+                <li><a href="https://www.nafsa.org/sites/default/files/media/document/State%20by%20State%2021_22%20study%20abroad%20statistics.pdf" target="_blank">Study Abroad Participation</a> - Sourced from NAFSA, a non-profit organization for international education professionals.</li>
+                <li><a href="https://opendoorsdata.org/data/us-study-abroad/duration-of-study-abroad/" target="_blank">Study Abroad Duration</a> - Data provided by IIE Open Doors, a comprehensive information resource on international students and scholars.</li>
+                <li><a href="https://assets.aifsabroad.com/images/v1659032819/PDF/outcomes2018/outcomes2018.pdf?_i=AA" target="_blank">Cultural Competence from Study Abroad</a> - Information gathered from AIFS Abroad, a leading provider of study abroad programs.</li>
+                <li><a href="https://www.iesabroad.org/about/alumni-survey-results" target="_blank">Professional Readiness from Study Abroad</a> - Data collected by IES Abroad, a not-for-profit provider with 140+ study abroad and internship programs.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-5">
         <div class="col-md-6 offset-md-3">
             <h2 class="text-center about-header">About Me</h2>
             <p class="text-center about-text">My name is Rohan Shah, a Computer Science major at the Albert Dorman Honors College. I am passionate about leveraging technology to solve real-world problems and connect communities.</p>
             <p class="text-center social-links">Connect with me on <a href="https://github.com/rshah713/" target="_blank">GitHub</a> or <a href="https://www.linkedin.com/in/rohan-shah-528504245/" target="_blank">LinkedIn</a>.</p>
         </div>
+    </div>
+    <div class="footer">
+        Crafted with <span style="color: #e25555;">&#9829;</span> and code. Join the journey <a href="http://github.com/rshah713/NJITGlobalExplorer" target="_blank">here</a>!
     </div>
 </div>
 {% endblock %}
