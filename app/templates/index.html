@@ -56,6 +56,28 @@
                 height: auto; /* Revert to auto height on larger screens */
             }
         }
+        .bot-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #4B5364; /* Changed to a darker blue color that matches the Atomic One Dark aesthetic */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s; /* Added transition for smooth color change */
+        }
+        .bot-button:hover {
+            background-color: #3A3F4B; /* Color change on hover */
+        }
+        .bot-button img {
+            width: 30px;
+            height: 30px;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +132,9 @@
         <!-- Additional rows can be added here -->
     </div>
 
+    <div class="bot-button">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Chatbot Icon">
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="static/js/animations.js"></script>
     <script>
@@ -311,3 +336,4 @@
 </body>
 </html>
 {% endblock %}
+
