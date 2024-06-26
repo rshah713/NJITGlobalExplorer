@@ -93,10 +93,13 @@ def handle_login():
         print('=> ERROR: NOT NJIT EMAIL')
         session.clear()
         return jsonify({'error': 'Unauthorized access'}), 401
-    elif not valid_ucid(user_info.get('email', '')): #ToDo: log unauthorized errors in firebase
-        print('=> ERROR: NOT VALID UCID')
-        session.clear()
-        return jsonify({'error': 'Unauthorized access'}), 401
+        '''
+        keep open rn until we get more users
+        '''
+    # elif not valid_ucid(user_info.get('email', '')): #ToDo: log unauthorized errors in firebase
+        # print('=> ERROR: NOT VALID UCID')
+        # session.clear()
+        # return jsonify({'error': 'Unauthorized access'}), 401
     else:
         print('=> Logged in with', user_info.get('email'))
     session.clear()
