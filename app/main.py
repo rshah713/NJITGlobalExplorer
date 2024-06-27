@@ -1,4 +1,4 @@
-import socket
+from time import sleep
 import os
 import base64
 
@@ -189,6 +189,17 @@ def save_new_admin():
     if not res:
         return jsonify({'error': 'Failed to save data'}), 500
     return jsonify({'message': 'Data saved successfully!'}), 200
+
+@app.route('/chatbot')
+def chatbot():
+    return render_template('chatbot.html')
+
+@app.route('/make_llm_request', methods=["POST"])
+def make_llm_request():
+    data = request.json
+    sleep(1.5)
+    return jsonify({'response': 'message recieved'}), 200
+
 
 if __name__ == '__main__':
     load_dotenv()
