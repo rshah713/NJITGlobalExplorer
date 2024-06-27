@@ -251,6 +251,8 @@
     <script src="static/js/animations.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            let convoHistory = [];
+
             function toggleChatPopup() {
                 const chatPopup = document.querySelector('#chat-popup');
                 const botButtonImg = document.querySelector('.bot-button img');
@@ -277,19 +279,17 @@
                 const message = userInput.value.trim();
                 if (message) {
                     addMessageToChat(message);
-                    userInput.value = ''; // Clear the input field
+                    userInput.value = '';
 
-                    // Show typing indicator
                     const typingIndicator = document.querySelector('#typing-indicator');
                     typingIndicator.style.display = 'block';
 
-                    // Make a request to /make_llm_request with the message
                     fetch('/make_llm_request', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ message: message })
+                        body: JSON.stringify({ message: message, convo_history: convoHistory })
                     })
                     .then(response => {
                         if (!response.ok) {
@@ -299,18 +299,17 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Hide typing indicator
                         typingIndicator.style.display = 'none';
-
                         if (data && data.response) {
                             addMessageToChat(data.response, false); // Add response as a left bubble
+                        }
+                        if (data && data.convo_history) {
+                            convoHistory = data.convo_history;
                         }
                     })
                     .catch(error => {
                         // Hide typing indicator and show offline message
-                        // typingIndicator.style.display = 'none';
                         typingIndicator.textContent = 'NJITGlobalExplorer is offline';
-
                         console.error('Error:', error);
                     });
                 }

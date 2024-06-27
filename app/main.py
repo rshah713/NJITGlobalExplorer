@@ -1,4 +1,3 @@
-from time import sleep
 import os
 import base64
 
@@ -190,15 +189,35 @@ def save_new_admin():
         return jsonify({'error': 'Failed to save data'}), 500
     return jsonify({'message': 'Data saved successfully!'}), 200
 
-@app.route('/chatbot')
-def chatbot():
-    return render_template('chatbot.html')
-
 @app.route('/make_llm_request', methods=["POST"])
 def make_llm_request():
-    data = request.json
-    sleep(1.5)
-    return jsonify({'response': 'message recieved'}), 200
+    try:
+        user_msg = request.json['message']
+        convo_history = request.json['convo_history']
+    except KeyError as e:
+        return jsonify({'response': str(e), 'convo_history': []}), 500
+    
+    if session.get('idToken') is None:
+        idToken = session.get('guest_idToken')
+    else:
+        idToken = session.get('idToken')
+    data = get_firebase_chart_data(idToken)
+    del data['description']
+    # filter out uneeded attrs -- keep only [data] and [labels]
+    new_data = {
+        chart_name: {
+            'labels': chart_data['labels'],
+            'datasets': [
+                {'label': dataset['label'], 'data': dataset['data']} 
+                for dataset in chart_data['datasets']
+            ]
+        }
+        for chart_name, chart_data in data.items()
+    }
+    resp = llm.chat_with_user(user_msg, new_data, convo_history)
+    convo_history.append(f'User: {user_msg}')
+    convo_history.append(f'NJITGlobalExplorer: {resp}')
+    return jsonify({'response': resp, 'convo_history': convo_history}), 200
 
 
 if __name__ == '__main__':
