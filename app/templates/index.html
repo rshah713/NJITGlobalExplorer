@@ -516,8 +516,8 @@
                     const durationChart = new Chart(durationCtx, durationConfig);
 
                     const culturalCompetenceChart = new Chart(culturalCompetenceCtx, culturalCompetenceConfig);
-                    data.culturalCompetence.datasets[0].data = data.culturalCompetence.datasets[0].data.map((value) => value);
-                    data.culturalCompetence.datasets[1].data = data.culturalCompetence.datasets[1].data.map((value) => -value);
+                    data.culturalCompetence.datasets[0].data = data.culturalCompetence.datasets[0].data.map((value) => -value);
+                    data.culturalCompetence.datasets[1].data = data.culturalCompetence.datasets[1].data.map((value) => value);
                     culturalCompetenceChart.update();
 
                     const professionalChart = new Chart(professionalCtx, professionalConfig);
