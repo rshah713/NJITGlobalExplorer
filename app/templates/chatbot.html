@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+
+{% block title %}NJIT Global Explorer Dashboard{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@300&display=swap" rel="stylesheet">    
+    <style>
+        .bot-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #4B5364;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .bot-button:hover {
+            background-color: #3A3F4B;
+        }
+        .bot-button img {
+            width: 30px;
+            height: 30px;
+        }
+        .chat-popup {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .chat-header {
+            background-color: #4B5364;
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-header span {
+            flex: 1;
+        }
+        .chat-header button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .messages {
+            max-height: 250px; /* Adjusted height to accommodate typing indicator */
+            overflow-y: auto;
+            padding-bottom: 10px; /* Reduced padding to decrease space between messages */
+        }
+        .message-bubble {
+            background-color: #606060; /* Darker color for message bubble */
+            color: #ffffff; /* Lighter text color */
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px; /* Reduced margin to decrease space between messages */
+            max-width: 80%;
+            word-wrap: break-word;
+            display: inline-block;
+            text-align: left;
+        }
+        .message-bubble.right {
+            float: right;
+            clear: both;
+        }
+        .message-bubble.left {
+            float: left;
+            clear: both;
+            background-color: #505050; /* Slightly darker color for left bubble */
+        }
+        .typing-indicator {
+            display: none;
+            margin: 10px;
+            font-size: 14px;
+            color: #606060;
+        }
+        .chat-footer {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #f1f1f1;
+        }
+        .chat-footer input[type="text"] {
+            width: calc(100% - 90px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .chat-footer button {
+            padding: 8px 20px;
+            background-color: #4B5364;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .chat-footer button:hover {
+            background-color: #3A3F4B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ session.get('displayName', 'Guest') }}!</h1>
+        <h2>NJIT Study Abroad Analytics Dashboard</h2>
+    
+        <div class="row">
+            <div class="chart-container">
+                <canvas id="abroadParticipationCtx"></canvas>
+            </div>
+            <div class="text-container" id="abroadParticipationText">
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bot-button">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Chatbot Icon">
+    </div>
+    <div id="chat-popup" class="chat-popup">
+        <div class="chat-header">
+            <img src="static/highlander_logo.png" alt="Profile Picture">
+            <span>NJITGlobalExplorer</span>
+            <button id="close-popup-btn">&times;</button>
+        </div>
+        <div class="messages" id="messages">
+            <!-- Chat messages will be displayed here -->
+        </div>
+        <div class="typing-indicator" id="typing-indicator">NJITGlobalExplorer is typing...</div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let convoHistory = [];
+
+            function toggleChatPopup() {
+                const chatPopup = document.querySelector('#chat-popup');
+                const botButtonImg = document.querySelector('.bot-button img');
+                if (chatPopup.style.display === 'none' || chatPopup.style.display === '') {
+                    chatPopup.style.display = 'block';
+                    botButtonImg.src = 'https://cdn-icons-png.flaticon.com/512/271/271210.png'; // Down arrow icon
+                } else {
+                    chatPopup.style.display = 'none';
+                    botButtonImg.src = 'https://cdn-icons-png.flaticon.com/512/4712/4712027.png'; // Chatbot icon
+                }
+            }
+
+            function addMessageToChat(message, isUser = true) {
+                const messagesContainer = document.querySelector('#messages');
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message-bubble', isUser ? 'right' : 'left');
+                messageElement.textContent = message;
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to the bottom
+            }
+
+            function sendMessage() {
+                const userInput = document.querySelector('#user-input');
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessageToChat(message);
+                    userInput.value = '';
+
+                    const typingIndicator = document.querySelector('#typing-indicator');
+                    typingIndicator.style.display = 'block';
+
+                    fetch('/make_llm_request', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: message, convo_history: convoHistory })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            typingIndicator.textContent = 'NJITGlobalExplorer is offline';
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        typingIndicator.style.display = 'none';
+                        if (data && data.response) {
+                            addMessageToChat(data.response, false); // Add response as a left bubble
+                        }
+                        if (data && data.convo_history) {
+                            convoHistory = data.convo_history;
+                        }
+                    })
+                    .catch(error => {
+                        // Hide typing indicator and show offline message
+                        typingIndicator.textContent = 'NJITGlobalExplorer is offline';
+                        console.error('Error:', error);
+                    });
+                }
+            }
+
+            document.querySelector('.bot-button').addEventListener('click', function() {
+                toggleChatPopup();
+            });
+
+            document.querySelector('#close-popup-btn').addEventListener('click', function() {
+                toggleChatPopup();
+            });
+
+            document.querySelector('#send-btn').addEventListener('click', function() {
+                sendMessage();
+            });
+
+            document.querySelector('#user-input').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}
