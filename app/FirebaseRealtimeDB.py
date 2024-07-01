@@ -137,33 +137,8 @@ if __name__ == "__main__":
                 ]
             }
     idToken = create_temp_user()[0]
-    data = get_chart_data(idToken)
-    del data['description']
-    # for chartname in data:
-        # del data[chartname]['datasets']['backgroundColor']
-    # filter out uneeded attrs -- keep only [data] and [labels]
-    new_data = {
-        chart_name: {
-            'labels': chart_data['labels'],
-            'datasets': [
-                {'label': dataset['label'], 'data': dataset['data']} 
-                for dataset in chart_data['datasets']
-            ]
-        }
-        for chart_name, chart_data in data.items()
-    }
-    i = None
-    convo_history = []
-    while True:
-        i = input("Enter a question: ")
-        if i == '':
-            break
-        resp = chat_with_user(i, new_data, convo_history)
-        print(resp)
-        convo_history.append(f'User: {i}')
-        convo_history.append(f'NJITGlobalExplorer: {resp}')
-        print(convo_history)
-    # save_chart_data(idToken, 'newChartData', data)
+    
+    save_chart_data(idToken, 'newChartData', data)
     # c = get_chart_data(idToken)['abroadParticipation']['datasets'][1]
     # c['spanGaps'] = True
     # l = [1.01]*51

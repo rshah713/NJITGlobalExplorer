@@ -24,11 +24,11 @@ function deleteAccounts() {
                         var deleteButton = Array.from(buttons).find(button => button.textContent.trim() === 'Delete' && button.classList.contains('confirm-button'));
                         if (deleteButton) {
                             deleteButton.click();
-                            setTimeout(next, 1000);  // wait for 2 seconds before moving to the next row
+                            setTimeout(next, 500);  // wait before moving to the next row
                         }
-                    }, 500);  // wait for 1 second before clicking "Delete"
+                    }, 250);  // wait before clicking "Delete"
                 }
-            }, 500);  // wait for 1 second before clicking "Delete Account"
+            }, 250);  // wait before clicking "Delete Account"
         } else {
             console.log('No more accounts to delete.');
         }
