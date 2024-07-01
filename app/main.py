@@ -223,7 +223,12 @@ def make_llm_request():
 if __name__ == '__main__':
     load_dotenv()
     if os.getenv('DEV_MODE', 'False') == 'True':
-        app.run(debug=True, host=os.getenv('HOSTNAME'))
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("10.255.255.255", 1))
+        host_ip = s.getsockname()[0]
+        s.close()
+        app.run(debug=True, host=host_ip)
     else:
         app.run(debug=True)
 
