@@ -15,7 +15,12 @@
                 <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google logo" class="google-logo">
                 Continue with Google
             </button>
-            <a href="#" class="help-link">Need help?</a>
+            <a href="#" class="help-link" onclick="showHelpAlert()">Need help?</a>
+            <script>
+                function showHelpAlert() {
+                    alert("Sign into Google with your @njit.edu email address. Reach out to developer rs2459@njit.edu for help signing in.");
+                }
+            </script>
         </div>
     </div>
 </div>
@@ -43,52 +48,6 @@
   // const app = initializeApp(firebaseConfig);
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-//   onAuthStateChanged(auth, (user) => {
-//     if (user) {
-//         // User is signed in.
-//         user.getIdTokenResult().then((idTokenResult) => {
-//             fetch('/handle_login', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: JSON.stringify({
-//                     uid: user.uid,
-//                     email: user.email,
-//                     displayName: user.displayName,
-//                     idToken: idTokenResult.token,
-//                     refreshToken: user.refreshToken
-//                 })
-//             }).then((response) => {
-//                 if (!response.ok) {
-//                     logout();
-//                     console.error("Error returned by /handle_login:", response);
-//                     alert('Must use NJIT email to login');
-//                     window.location.href = '/login';
-//                 } else {
-//                     window.location.href = '/';
-//                 }
-//             }).catch((error) => {
-//                 console.error("Error during handle_login:", error);
-//                 alert('Must use NJIT email to login');
-//                 window.location.href = '/login';
-//             });
-//         });
-//     } else {
-//       console.log("user is def null");
-//       console.log(user);
-//       setTimeout(() => {
-//             const currentUser = auth.currentUser;
-//             if (currentUser) {
-//                 console.log('wait we got a new user!!!!')
-//                 console.log(currentUser);
-//             } else {
-//                 console.log('frick still null');
-//             }
-//         }, 5000);
-//       // logout();
-//     }
-// });
 
   window.login = function() {
     const provider = new GoogleAuthProvider();
