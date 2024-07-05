@@ -8,7 +8,7 @@ load_dotenv()
 
 client = Together(api_key=os.getenv('TOGETHER_API_KEY'))
 
-def make_request(dataset, dataset_info, user_prompt, system_prompt=None, user_msg=None):
+def make_request(system_prompt, user_msg, convo_history=None):
     if system_prompt is None:
         system_prompt = '''Your name is NJITGlobalExplorer, you are an AI model used in a data-visualization interactive dashboard displaying Study Abroad data with both National & NJIT specific datasets. \
             You are going to be given the data in JSON format and are to respond with the answer to the user's question using the data provided. Be specific when answering the user_query and cite data points if needed (explicit citation at the bottom is not needed). \
@@ -17,29 +17,27 @@ def make_request(dataset, dataset_info, user_prompt, system_prompt=None, user_ms
         user_query: What year has an abormally low % of Semester Abroad students?
         response: Based on the data, I can see that the year 2020 has an abnormally low percentage of semester abroad students for both national and NJIT-specific datasets. For the 'National - Semester' dataset, the percentage is 62.7, which is significantly higher than the other years. For the 'NJIT - Semester' dataset, the percentage is 5.9, which is significantly lower than the other years.
     '''
-    if user_msg is None:
-        if dataset_info:
-            user_msg = f'''data: {dataset}
-        dataset_description: {dataset_info}
-        user_query: {user_prompt}
-        '''
-        else:
-            user_msg = f'''data: {dataset}
-        user_query: {user_prompt}
-        '''
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_msg}
-    ]
+    
+    if convo_history:
+        messages = convo_history
+    else:
+        messages = [
+            {"role": "system", "content": system_prompt}
+        ]
+
+    messages.append({"role": "user", "content": user_msg})
     response = client.chat.completions.create(
-    model="meta-llama/Llama-3-8b-chat-hf",
-    messages=messages,
+        model="meta-llama/Llama-3-8b-chat-hf",
+        messages=messages,
     )
-    return response.choices[0].message.content
+    messages.append({"role": "assistant", "content":response.choices[0].message.content})
+    # print("=> LLM Request with messages:")
+    # for message in messages:
+    #     print(f"  => {message}")
+    return response.choices[0].message.content, messages
 
 def get_dataset_info(chartName):
     if chartName == 'abroadParticipation':
-        print("=> Fetching AbroadParticipation LLM Prompt")
         desc = 'The labels represent the states, the National dataset is the % of study abroad by state (e.g % of students that go abroad in NJ, VA, etc). \
             The NJIT line is consistent as it \
             represents % of NJIT students that study abroad in general at the university. When analyzing the NJIT line, ignore any state related info, \
@@ -58,19 +56,28 @@ def generate_dataset_paragraph(dataset, dataset_info=None):
             Give a good summary of the data as a whole and include a brief comparative analysis between NJIT and National Study Abroad Programs. \
                 It should be 6-8 sentences and it should be very specific. If the datapoints are less than the labels, assume, the rest of the points are null.\
                     Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...).\
-                        The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')'''
+                        The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')
+                        
+                        '''
     else:
         system_prompt = '''You are a data-analysis agent tasked with generating 6-8 sentence descriptions of a dataset. Do not use first-person pronouns. \
             Give a good summary of the data as a whole and include a brief analysis of NJIT and National Study Abroad Programs seperately. \
                 It should be 6-8 sentences and it should be very specific. If the datapoints are less than the labels, assume, the rest of the points are null.\
                     Do not give conclusion/summaries (e.g. Overall, the data suggests...) or introductions (e.g. the dataset provided offers valuable insights into...).\
-                        The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')'''
+                        *The last sentence should be a big-picture application of a trend or conclusion found from the data (should be directly related to data, not generic 'study other areas')*
+                        
+                        '''
     if dataset_info is None:
         dataset_info = get_dataset_info(list(dataset.keys())[0])
-    return make_request(dataset, dataset_info, 'Find some trends in this data', system_prompt=system_prompt)
+    system_prompt_ext = f"""
+    data:{dataset}
+        dataset_description: {dataset_info}
+        """
+    system_prompt += system_prompt_ext
+    return make_request(user_msg='Find some trends in this data', system_prompt=system_prompt)
 
 
-def chat_with_user(user_msg, datasets, convo_history=None):
+def chat_with_user(user_msg, datasets, convo_history):
     system_prompt = """You are NJITGlobalExplorer, a chatbot in a Study Abroad Analytics system on the NJIT Study Abroad website. Analyze user messages and structure a response based on provided data.
 
 Consider:
@@ -84,7 +91,9 @@ The last sentence of the response should cite the data that is used in the forma
 
 The response should be JSON in the form {"response": "{response_to_be_generated_and_sent_to_user}"}.
 
-Do not include any additional text or explanations or notes outside the JSON format. Make sure to cite the exact source name provided in the Dataset Sources."""
+Do not include any additional text or explanations or notes outside the JSON format. Make sure to cite the exact source name provided in the Dataset Sources.
+
+"""
     dataset_sources = {
         "abroadParticipation": {
             'description': 'The study abroad % participation rate, where the National dataset is broken down by state, and the NJIT datapoints represent the overall study abroad participation rate at NJIT (ex. 1.01 = 1.01% of students study abroad)',
@@ -113,14 +122,13 @@ Do not include any additional text or explanations or notes outside the JSON for
     }
     
     
-    user_msg = f"""
+    system_prompt_ext = f"""
     {{
-        "Conversation History": {convo_history},
-        "User Message": {user_msg},
         "Data": {datasets},
         "Dataset Sources": {dataset_sources}
     }}
     """
-    resp = make_request(dataset=datasets, dataset_info=None, user_prompt=user_msg, system_prompt=system_prompt)
+    system_prompt += system_prompt_ext
+    resp, convo_history = make_request(user_msg=user_msg, system_prompt=system_prompt, convo_history=convo_history)
     json_object = json.loads(resp[resp.find('{'):resp.find('}') + 1])
-    return json_object.get('response', '')
+    return json_object.get('response', ''), convo_history

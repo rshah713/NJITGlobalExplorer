@@ -146,7 +146,7 @@ def save_new_data():
         return jsonify({'error': 'Failed to save data'}), 500
     
     llm_msg = {data.get('chartName'): entry}
-    llm_response = llm.generate_dataset_paragraph(llm_msg)
+    llm_response, _ = llm.generate_dataset_paragraph(llm_msg)
     save_chart_description(session.get('idToken'), data.get('chartName'), llm_response)
     return jsonify({'message': 'Post successful'}), 200
 
@@ -214,9 +214,7 @@ def make_llm_request():
         }
         for chart_name, chart_data in data.items()
     }
-    resp = llm.chat_with_user(user_msg, new_data, convo_history)
-    convo_history.append(f'User: {user_msg}')
-    convo_history.append(f'NJITGlobalExplorer: {resp}')
+    resp, convo_history = llm.chat_with_user(user_msg, new_data, convo_history)
     return jsonify({'response': resp, 'convo_history': convo_history}), 200
 
 
