@@ -84,7 +84,7 @@ def handle_login():
     user_info = request.json
     e = base64.b64decode(b'NzEzcm9oYW5zaGFoQGdtYWlsLmNvbQ==').decode()
     # if not user_info.get('email', '').endswith('njit.edu'):
-    if user_info.get('email', '') == e or user_info.get('email', '') == 'shah.v.rohan@gmail.com':
+    if user_info.get('email', '') == e:
         # print('ERROR: NOT NJIT EMAIL')
         # return jsonify({'error': 'Unauthorized access'}), 401
         print("=> Developer Access Granted")
@@ -102,7 +102,7 @@ def handle_login():
     else:
         print('=> Logged in with', user_info.get('email'))
     session.clear()
-    print('=> GET valid_ucids: ', valid_ucid(user_info.get('email', '')))
+    print('=> IS valid_ucids: ', valid_ucid(user_info.get('email', '')))
     session['is_logged_in'] = True
     session['uid'] = user_info.get('uid')
     session['email'] = user_info.get('email')
