@@ -395,6 +395,14 @@
                             }
                         }
                     };
+                    data.abroadParticipation.datasets.forEach(function(dataset) {
+                        if (dataset.label === 'NJIT') {
+                            // [{x: 'AL', y: 1.01}, {x: 'WY', y: 1.01}],
+                            dataset.data = [
+                                {x: data.abroadParticipation.labels[0], y: dataset.data?.[0]}, // x: 1st label elem ['AL'], y: 1st data elem
+                                {x: data.abroadParticipation.labels[data.abroadParticipation.labels.length -1], y: dataset.data?.[0]}]; // x: last label elem ['WY'], y: 1st data elem
+                        }
+                    });
                     const participationConfig = {
                         type: 'line',
                         data: data.abroadParticipation,
