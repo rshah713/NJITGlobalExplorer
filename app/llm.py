@@ -4,12 +4,12 @@ import json
 from dotenv import load_dotenv
 from together import Together
 from mistralai.client import MistralClient
-
+from openai import OpenAI
 load_dotenv()
 
 client = Together(api_key=os.getenv('TOGETHER_API_KEY'))
 mistral_client = MistralClient(api_key=os.getenv("MISTRAL_API_KEY"))
-
+openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 def make_mistral_request(system_prompt, user_msg, convo_history=None):
     # Note: Mistral doesn't keep track of conversation history.
     if system_prompt is None:
@@ -43,7 +43,31 @@ def make_mistral_request(system_prompt, user_msg, convo_history=None):
         print(f"  => {message}")
     return response.choices[0].message.content, messages
 
+
 def make_request(system_prompt, user_msg, convo_history=None):
+    if system_prompt is None:
+        system_prompt = '''Your name is NJITGlobalExplorer, you are an AI model used in a data-visualization interactive dashboard displaying Study Abroad data with both National & NJIT specific datasets. \
+            You are going to be given the data in JSON format and are to respond with the answer to the user's question using the data provided. Be specific when answering the user_query and cite data points if needed (explicit citation at the bottom is not needed). \
+    The response should be short & direct and should not recite the datapoints back to the user.
+    Example:
+        user_query: What year has an abormally low % of Semester Abroad students?
+        response: Based on the data, I can see that the year 2020 has an abnormally low percentage of semester abroad students for both national and NJIT-specific datasets. For the 'National - Semester' dataset, the percentage is 62.7, which is significantly higher than the other years. For the 'NJIT - Semester' dataset, the percentage is 5.9, which is significantly lower than the other years.
+    '''
+    if convo_history:
+        messages = convo_history
+    else:
+        messages = [
+            {"role": "system", "content": system_prompt}
+        ]
+    messages.append({"role": "user", "content": user_msg})
+    response = openai_client.chat.completions.create(model="gpt-4o-mini", messages=messages)
+    messages.append({"role": "assistant", "content":response.choices[0].message.content})
+    # print("=> LLM Request with messages:")
+    # for message in messages:
+    #     print(f"  => {message}")
+    return response.choices[0].message.content, messages
+
+def make_togetherai_request(system_prompt, user_msg, convo_history=None):
     if system_prompt is None:
         system_prompt = '''Your name is NJITGlobalExplorer, you are an AI model used in a data-visualization interactive dashboard displaying Study Abroad data with both National & NJIT specific datasets. \
             You are going to be given the data in JSON format and are to respond with the answer to the user's question using the data provided. Be specific when answering the user_query and cite data points if needed (explicit citation at the bottom is not needed). \
@@ -179,5 +203,5 @@ if __name__ == '__main__':
         user_msg = input("==> Enter Chatbot msg: ")
         if user_msg == '':
             break
-        resp, convo_history = make_mistral_request(system_prompt=system_prompt, user_msg=user_msg, convo_history=convo_history)
+        resp, convo_history = make_openai_request(system_prompt=system_prompt, user_msg=user_msg, convo_history=convo_history)
         print('=> ', resp)
