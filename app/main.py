@@ -214,6 +214,10 @@ def make_llm_request():
         }
         for chart_name, chart_data in data.items()
     }
+    print({
+        'request_type': 'make_llm_request',
+        'query': user_msg
+    })
     resp, convo_history = llm.chat_with_user(user_msg, new_data, convo_history)
     return jsonify({'response': resp, 'convo_history': convo_history}), 200
 
